@@ -12,7 +12,7 @@ const modules = [
         icon: Brain,
         color: '#8b5cf6',
         spanX: 4,
-        spanY: 2,
+        spanY: 1,
         light: true
     },
     {
@@ -22,7 +22,7 @@ const modules = [
         icon: Users,
         color: '#0ea5e9',
         spanX: 2,
-        spanY: 2
+        spanY: 1
     },
     {
         id: 'academic',
@@ -58,7 +58,7 @@ const modules = [
         icon: Home,
         color: '#6366f1',
         spanX: 3,
-        spanY: 2
+        spanY: 1
     },
     {
         id: 'hr',
@@ -67,7 +67,7 @@ const modules = [
         icon: UserRound,
         color: '#ec4899',
         spanX: 3,
-        spanY: 2
+        spanY: 1
     },
     {
         id: 'engage',
@@ -82,10 +82,6 @@ const modules = [
 
 const ModuleShowcase = () => {
     const getGridClasses = (spanX, spanY) => {
-        // Mobile: always span 1
-        // Tablet (sm): span 1
-        // Tablet (md): span 1
-        // Desktop (lg): use custom spans
         const baseClasses = 'col-span-1';
         const lgClasses = {
             4: 'lg:col-span-4',
@@ -97,7 +93,7 @@ const ModuleShowcase = () => {
             2: 'lg:row-span-2',
             1: 'lg:row-span-1',
         };
-        
+
         return `${baseClasses} ${lgClasses[spanX] || 'lg:col-span-2'} ${rowClasses[spanY] || 'lg:row-span-1'}`;
     };
 
@@ -108,20 +104,28 @@ const ModuleShowcase = () => {
     };
 
     return (
-        <section className="bg-white relative" style={{ 
-            paddingTop: 'clamp(4rem, 10vw, 10rem)',
-            paddingBottom: 'clamp(4rem, 10vw, 10rem)',
-            overflowX: 'hidden'
+        <section className="relative overflow-hidden" style={{
+            background: 'radial-gradient(ellipse at top, #f8fafc 0%, #f1f5f9 100%)',
+            paddingTop: 'clamp(4rem, 8vw, 8rem)',
+            paddingBottom: 'clamp(4rem, 8vw, 8rem)'
         }}>
-            <div className="section-container">
-                <div className="text-center" style={{ 
+            {/* Background Grid Pattern */}
+            <div className="absolute inset-0 z-0 opacity-[0.4]"
+                style={{
+                    backgroundImage: 'linear-gradient(#cbd5e1 1px, transparent 1px), linear-gradient(90deg, #cbd5e1 1px, transparent 1px)',
+                    backgroundSize: '40px 40px'
+                }}
+            />
+
+            <div className="section-container relative z-10">
+                <div className="text-center" style={{
                     marginBottom: 'clamp(3rem, 8vw, 6rem)'
                 }}>
                     <motion.span
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         className="font-extrabold uppercase tracking-tight block"
-                        style={{ 
+                        style={{
                             color: 'var(--color-primary)',
                             fontSize: 'clamp(0.6rem, 1.5vw, 0.7rem)',
                             letterSpacing: 'clamp(0.2rem, 0.5vw, 0.3125rem)',
@@ -130,16 +134,16 @@ const ModuleShowcase = () => {
                     >
                         Digital Ecosystem
                     </motion.span>
-                    <h2 className="font-extrabold text-slate-900 leading-tight tracking-tight" style={{ 
+                    <h2 className="font-extrabold text-slate-900 leading-tight tracking-tight" style={{
                         fontSize: 'clamp(2rem, 5vw, 4rem)',
                         lineHeight: '1.1'
                     }}>
                         Unified Institutional <br />
-                        <span className="text-slate-300">Intelligence Core.</span>
+                        <span className="text-slate-400">Intelligence Core.</span>
                     </h2>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 auto-rows-auto" style={{ 
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 auto-rows-auto" style={{
                     gap: 'clamp(1rem, 2.5vw, 1.5rem)'
                 }}>
                     {modules.map((mod, i) => (
@@ -148,68 +152,94 @@ const ModuleShowcase = () => {
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.6, delay: i * 0.05 }}
-                            whileHover={{ y: -5 }}
+                            transition={{ duration: 0.5, delay: i * 0.05 }}
                             className={`
                                 ${getGridClasses(mod.spanX, mod.spanY)}
                                 ${getMinHeight(mod.spanX, mod.spanY)}
-                                bg-white rounded-[clamp(20px,4vw,35px)] border border-slate-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] flex flex-col justify-between cursor-pointer relative overflow-hidden hover:shadow-[0_15px_40px_rgba(0,0,0,0.06)] transition-shadow
+                                group relative overflow-hidden rounded-[2rem]
+                                backdrop-blur-xl transition-all duration-500
+                                hover:-translate-y-2 hover:shadow-2xl
                             `}
                             style={{
-                                padding: 'clamp(1.25rem, 3.5vw, 2.5rem)'
+                                backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                                border: '1px solid rgba(255, 255, 255, 0.6)',
+                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01)'
                             }}
                         >
-                            <div className="relative z-10">
-                                <div 
-                                    className="rounded-xl flex justify-center items-center flex-shrink-0"
-                                    style={{
-                                        width: 'clamp(2.5rem, 4vw, 3rem)',
-                                        height: 'clamp(2.5rem, 4vw, 3rem)',
-                                        backgroundColor: `${mod.color}10`,
-                                        color: mod.color,
-                                        marginBottom: 'clamp(1rem, 2.5vw, 1.5rem)'
-                                    }}
-                                >
-                                    <mod.icon size={24} />
+                            {/* Hover Gradient Overlay */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                style={{
+                                    background: `linear-gradient(135deg, ${mod.color}10 0%, transparent 40%, transparent 100%)`
+                                }}
+                            />
+
+                            {/* Tech Grid overlay on card */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500 pointer-events-none"
+                                style={{
+                                    backgroundImage: `radial-gradient(${mod.color} 1px, transparent 1px)`,
+                                    backgroundSize: '20px 20px'
+                                }}
+                            />
+
+                            <div className="relative z-10 h-full flex flex-col justify-between" style={{
+                                padding: 'clamp(1.5rem, 3.5vw, 2.5rem)'
+                            }}>
+                                <div>
+                                    {/* Icon Container */}
+                                    <div
+                                        className="rounded-2xl flex justify-center items-center flex-shrink-0 mb-6 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
+                                        style={{
+                                            width: 'clamp(3rem, 4vw, 3.5rem)',
+                                            height: 'clamp(3rem, 4vw, 3.5rem)',
+                                            backgroundColor: 'white',
+                                            color: mod.color,
+                                            boxShadow: `0 8px 16px -4px ${mod.color}20`
+                                        }}
+                                    >
+                                        <mod.icon size={28} strokeWidth={1.5} />
+                                    </div>
+
+                                    <h3 className="font-extrabold tracking-tight text-slate-800 group-hover:text-slate-900 transition-colors" style={{
+                                        fontSize: 'clamp(1.2rem, 3vw, 1.6rem)',
+                                        marginBottom: '0.75rem',
+                                        lineHeight: '1.2'
+                                    }}>
+                                        {mod.title}
+                                    </h3>
+                                    <p className="font-medium text-slate-500 group-hover:text-slate-600 transition-colors" style={{
+                                        fontSize: 'clamp(0.9rem, 2vw, 0.95rem)',
+                                        lineHeight: '1.6'
+                                    }}>
+                                        {mod.desc}
+                                    </p>
                                 </div>
 
-                                <h3 className="font-extrabold tracking-tight" style={{ 
-                                    color: 'var(--color-text-main)',
-                                    fontSize: 'clamp(1.1rem, 3vw, 1.5rem)',
-                                    marginBottom: 'clamp(0.625rem, 1.5vw, 0.75rem)',
-                                    lineHeight: '1.3'
-                                }}>
-                                    {mod.title}
-                                </h3>
-                                <p className="leading-relaxed" style={{ 
-                                    color: 'var(--color-text-muted)',
-                                    fontSize: 'clamp(0.85rem, 2vw, 0.9rem)',
-                                    lineHeight: '1.6'
-                                }}>
-                                    {mod.desc}
-                                </p>
+                                <div
+                                    className="flex items-center font-bold mt-6"
+                                    style={{
+                                        color: mod.color,
+                                        fontSize: '0.85rem'
+                                    }}
+                                >
+                                    <div className="relative overflow-hidden">
+                                        {/* Ghost element for sizing */}
+                                        <span className="opacity-0">View Module</span>
+
+                                        {/* Visible Elements */}
+                                        <span className="absolute top-0 left-0 transform translate-y-0 group-hover:-translate-y-[150%] transition-transform duration-300 block">
+                                            Explore
+                                        </span>
+                                        <span className="absolute top-0 left-0 transform translate-y-[150%] group-hover:translate-y-0 transition-transform duration-300 block">
+                                            View Module
+                                        </span>
+                                    </div>
+                                    <ArrowRight size={16} className="ml-2 transform group-hover:translate-x-1 transition-transform" />
+                                </div>
                             </div>
 
-                            <div 
-                                className="flex items-center font-bold relative z-10"
-                                style={{ 
-                                    color: mod.color,
-                                    gap: 'clamp(0.5rem, 1.2vw, 0.625rem)',
-                                    fontSize: 'clamp(0.75rem, 1.5vw, 0.8rem)',
-                                    marginTop: 'clamp(1.25rem, 3vw, 1.5rem)'
-                                }}
-                            >
-                                Explore <ArrowRight size={14} />
-                            </div>
-
-                            {/* Decorative faint glow */}
-                            <div 
-                                className="absolute -top-[20%] -right-[20%] blur-[60px] opacity-[0.05] z-0"
-                                style={{ 
-                                    background: mod.color,
-                                    width: 'clamp(80px, 12vw, 100px)',
-                                    height: 'clamp(80px, 12vw, 100px)'
-                                }}
+                            {/* Decorative Colored Blur Blob */}
+                            <div className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full blur-[50px] opacity-0 group-hover:opacity-20 transition-all duration-500"
+                                style={{ backgroundColor: mod.color }}
                             />
                         </motion.div>
                     ))}

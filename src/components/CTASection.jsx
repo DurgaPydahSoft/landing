@@ -1,67 +1,120 @@
 import { motion } from 'framer-motion';
+import { ArrowRight, Sparkles } from 'lucide-react';
+import { useState } from 'react';
 
 const CTASection = () => {
     return (
-        <section className="relative" style={{ 
+        <section className="relative overflow-hidden" style={{
             paddingTop: 'clamp(4rem, 8vw, 6rem)',
             paddingBottom: 'clamp(4rem, 8vw, 6rem)',
-            overflowX: 'hidden'
         }}>
-            <div className="section-container">
+            <div className="section-container relative z-10">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="text-white text-center rounded-3xl"
-                    style={{ 
-                        background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
-                        padding: 'clamp(2.5rem, 5vw, 4rem)',
-                        borderRadius: 'clamp(24px, 4vw, 32px)'
+                    transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
+                    className="relative overflow-hidden rounded-[2.5rem] text-center"
+                    style={{
+                        background: 'linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%)',
+                        boxShadow: '0 25px 50px -12px rgba(79, 70, 229, 0.5)'
                     }}
                 >
-                    <h2 className="font-extrabold" style={{ 
-                        fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
-                        lineHeight: '1.2',
-                        marginBottom: 'clamp(1.5rem, 3vw, 2rem)'
+                    {/* Dynamic Background Particles */}
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                        {[...Array(5)].map((_, i) => (
+                            <motion.div
+                                key={i}
+                                className="absolute rounded-full bg-white opacity-10"
+                                style={{
+                                    width: Math.random() * 300 + 100,
+                                    height: Math.random() * 300 + 100,
+                                    top: `${Math.random() * 100}%`,
+                                    left: `${Math.random() * 100}%`,
+                                }}
+                                animate={{
+                                    y: [0, -50, 0],
+                                    x: [0, 30, 0],
+                                    scale: [1, 1.2, 1],
+                                    rotate: [0, 45, 0]
+                                }}
+                                transition={{
+                                    duration: 15 + Math.random() * 10,
+                                    repeat: Infinity,
+                                    ease: "linear"
+                                }}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="relative z-10 flex flex-col items-center" style={{
+                        padding: 'clamp(3rem, 6vw, 5rem)'
                     }}>
-                        Ready to elevate your institution?
-                    </h2>
-                    <p className="opacity-90" style={{ 
-                        fontSize: 'clamp(1rem, 2vw, 1.1rem)',
-                        lineHeight: '1.6',
-                        marginBottom: 'clamp(2rem, 4vw, 2.5rem)',
-                        maxWidth: '600px',
-                        marginLeft: 'auto',
-                        marginRight: 'auto'
-                    }}>
-                        Join the growing list of entities scaling with Pydah today.
-                    </p>
-                    <motion.button
-                        whileHover={{ scale: 1.05, y: -2 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="bg-white rounded-md font-bold whitespace-nowrap transition-all duration-200"
-                        style={{ 
-                            color: 'var(--color-primary)', 
-                            boxShadow: '0 10px 20px rgba(0,0,0,0.1)',
-                            paddingLeft: 'clamp(1.5rem, 3.5vw, 2.5rem)',
-                            paddingRight: 'clamp(1.5rem, 3.5vw, 2.5rem)',
-                            paddingTop: 'clamp(0.875rem, 2vw, 1rem)',
-                            paddingBottom: 'clamp(0.875rem, 2vw, 1rem)',
-                            fontSize: 'clamp(0.9rem, 2vw, 1rem)',
-                            lineHeight: '1.5'
-                        }}
-                        onMouseEnter={(e) => {
-                            e.target.style.boxShadow = '0 15px 30px rgba(0,0,0,0.15)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.target.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
-                        }}
-                    >
-                        Start Your Journey
-                    </motion.button>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="inline-flex items-center gap-2 text-white text-sm font-medium mb-8"
+                        >
+                            <Sparkles size={16} className="text-yellow-300" />
+                            <span>Transform Your Campus Today</span>
+                        </motion.div>
+
+                        <motion.h2
+                            className="font-extrabold text-white tracking-tight leading-tight"
+                            style={{
+                                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                                marginBottom: '1.5rem',
+                                maxWidth: '1000px'
+                            }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                        >
+                            Ready to elevate your institution<br className="hidden md:block" /> to the next level?
+                        </motion.h2>
+
+                        <motion.p
+                            className="text-indigo-100/90 leading-relaxed mb-10"
+                            style={{
+                                fontSize: 'clamp(1.1rem, 2vw, 1.25rem)',
+                                maxWidth: '600px',
+                            }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.4 }}
+                        >
+                            Join the growing list of forward-thinking entities scaling their operations with Pydah's intelligent ecosystem.
+                        </motion.p>
+
+                        <InteractiveButton />
+                    </div>
                 </motion.div>
             </div>
         </section>
+    );
+};
+
+const InteractiveButton = () => {
+    return (
+        <motion.button
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, type: "spring" }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="group relative inline-flex items-center gap-3 bg-amber-400 text-amber-950 font-bold rounded-full overflow-hidden shadow-xl"
+            style={{
+                padding: '1.25rem 2.5rem',
+                fontSize: '1.1rem'
+            }}
+        >
+            <span className="relative z-10">Start Your Journey</span>
+            <ArrowRight className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" size={20} />
+
+            {/* Shiny Swipe Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out z-0" />
+        </motion.button>
     );
 };
 
