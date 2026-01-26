@@ -161,11 +161,6 @@ const EcosystemDiagram = () => {
                                         />
                                     </div>
 
-                                    {/* Connection Node Point (Visual anchor for line) */}
-                                    <div
-                                        className={`absolute w-3 h-3 rounded-full border-2 border-white top-1/2 -translate-y-1/2 ${mod.x < 0 ? '-right-1.5' : '-left-1.5'}`}
-                                        style={{ backgroundColor: mod.color }}
-                                    />
                                 </div>
 
                                 {/* Label */}

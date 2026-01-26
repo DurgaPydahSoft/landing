@@ -46,30 +46,45 @@ const BrowserMock = () => {
     const [activeTab, setActiveTab] = useState(tabs[0]);
     const containerRef = useRef(null);
     const [scale, setScale] = useState(1);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        const updateScale = () => {
+        const updateState = () => {
             if (containerRef.current) {
-                const { width, height } = containerRef.current.getBoundingClientRect();
-                // Simulate a standard desktop width (e.g., 1280px or 1440px)
-                // We calculate the scale needed to fit 1280px into the current container width
-                const simulatedWidth = 1280;
-                const newScale = width / simulatedWidth;
-                setScale(newScale);
+                const { width } = containerRef.current.getBoundingClientRect();
+                const mobile = width < 640; // Mobile breakpoint
+                setIsMobile(mobile);
+
+                if (!mobile) {
+                    // Desktop Simulation Logic
+                    const simulatedWidth = 1280;
+                    const newScale = width / simulatedWidth;
+                    setScale(newScale);
+                } else {
+                    setScale(1);
+                }
             }
         };
 
-        // Initial calculation
-        updateScale();
-
-        // Listen for resizes
-        const observer = new ResizeObserver(updateScale);
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
+        updateState();
+        const observer = new ResizeObserver(updateState);
+        if (containerRef.current) observer.observe(containerRef.current);
         return () => observer.disconnect();
     }, [activeTab]);
+
+    const handleNextTab = (e) => {
+        e.stopPropagation();
+        const currentIndex = tabs.findIndex(t => t.id === activeTab.id);
+        const nextIndex = (currentIndex + 1) % tabs.length;
+        setActiveTab(tabs[nextIndex]);
+    };
+
+    const handlePrevTab = (e) => {
+        e.stopPropagation();
+        const currentIndex = tabs.findIndex(t => t.id === activeTab.id);
+        const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+        setActiveTab(tabs[prevIndex]);
+    };
 
     const renderContent = () => {
         return (
@@ -77,9 +92,13 @@ const BrowserMock = () => {
                 <iframe
                     src={activeTab.redirectUrl}
                     title={activeTab.name}
-                    style={{
+                    style={isMobile ? {
+                        width: '100%',
+                        height: '100%',
+                        border: 0
+                    } : {
                         width: '1280px',
-                        height: `${100 / scale}%`, // Compensate height for scaling
+                        height: `${100 / scale}%`,
                         transform: `scale(${scale})`,
                         transformOrigin: 'top left',
                         border: 0,
@@ -98,16 +117,14 @@ const BrowserMock = () => {
     return (
         <div className="browser-mock w-full max-w-[900px] rounded-[clamp(12px,3vw,20px)] overflow-hidden relative mx-auto" style={{ boxShadow: 'var(--shadow-glass)', backgroundColor: 'var(--color-bg-white)', border: '1px solid var(--color-border-soft)' }}>
             {/* Window Controls & Tab Bar Merged */}
-            <div className="bg-slate-100 flex items-center border-b overflow-x-auto scrollbar-none [-webkit-overflow-scrolling:touch]" style={{
+            <div className="bg-slate-100 flex items-center border-b relative justify-center" style={{
                 borderColor: 'var(--color-border-soft)',
                 paddingTop: 'clamp(0.5rem, 1.2vw, 0.75rem)',
-                paddingBottom: 'clamp(0.25rem, 0.6vw, 0.25rem)', // Adjust for tab bottom alignment
-                paddingLeft: 'clamp(0.75rem, 1.8vw, 1rem)',
-                paddingRight: 'clamp(0.5rem, 1.2vw, 0.75rem)',
+                paddingBottom: 'clamp(0.25rem, 0.6vw, 0.25rem)',
                 gap: 'clamp(0.75rem, 1.5vw, 1rem)'
             }}>
-                {/* Traffic Lights */}
-                <div className="flex flex-shrink-0 mr-2" style={{ gap: 'clamp(0.375rem, 0.8vw, 0.5rem)' }}>
+                {/* Traffic Lights - Hidden on Mobile */}
+                <div className="hidden sm:flex flex-shrink-0 mr-2" style={{ gap: 'clamp(0.375rem, 0.8vw, 0.5rem)' }}>
                     <div className="rounded-full bg-[#ff5f56] flex-shrink-0" style={{
                         width: 'clamp(10px, 2vw, 12px)',
                         height: 'clamp(10px, 2vw, 12px)'
@@ -121,33 +138,37 @@ const BrowserMock = () => {
                         height: 'clamp(10px, 2vw, 12px)'
                     }} />
                 </div>
-                {tabs.map((tab) => {
-                    const Icon = tab.icon;
-                    const isActive = activeTab.id === tab.id;
-                    return (
-                        <div
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab)}
-                            className={`
-                                rounded-t-[10px] cursor-pointer flex items-center transition-all duration-200 flex-shrink-0 whitespace-nowrap -mb-px
-                                ${isActive ? 'bg-white font-bold border border-b-transparent' : 'bg-transparent font-medium border border-transparent'}
-                            `}
-                            style={{
-                                paddingTop: 'clamp(0.375rem, 0.9vw, 0.5rem)',
-                                paddingBottom: 'clamp(0.375rem, 0.9vw, 0.5rem)',
-                                paddingLeft: 'clamp(0.625rem, 1.5vw, 1rem)',
-                                paddingRight: 'clamp(0.625rem, 1.5vw, 1rem)',
-                                gap: 'clamp(0.375rem, 0.9vw, 0.5rem)',
-                                fontSize: 'clamp(0.625rem, 1.2vw, 0.6875rem)',
-                                minWidth: 'clamp(100px, 20vw, 130px)',
-                                ...(isActive ? { color: 'var(--color-text-main)', borderColor: 'var(--color-border-soft)' } : { color: 'var(--color-text-muted)', borderColor: 'transparent' })
-                            }}
-                        >
-                            <Icon size={14} color={tab.color} />
-                            <span className="tab-name">{tab.name}</span>
-                        </div>
-                    );
-                })}
+
+                {/* Scrollable Tabs */}
+                <div className="flex overflow-x-auto scrollbar-none items-center flex-1 sm:px-0" style={{ gap: 'clamp(0.25rem, 0.6vw, 0.375rem)' }}>
+                    {tabs.map((tab) => {
+                        const Icon = tab.icon;
+                        const isActive = activeTab.id === tab.id;
+                        return (
+                            <div
+                                key={tab.id}
+                                onClick={() => setActiveTab(tab)}
+                                className={`
+                                    rounded-t-[10px] cursor-pointer flex items-center transition-all duration-200 flex-shrink-0 whitespace-nowrap -mb-px
+                                    ${isActive ? 'bg-white font-bold border border-b-transparent' : 'bg-transparent font-medium border border-transparent'}
+                                `}
+                                style={{
+                                    paddingTop: 'clamp(0.375rem, 0.9vw, 0.5rem)',
+                                    paddingBottom: 'clamp(0.375rem, 0.9vw, 0.5rem)',
+                                    paddingLeft: 'clamp(0.625rem, 1.5vw, 1rem)',
+                                    paddingRight: 'clamp(0.625rem, 1.5vw, 1rem)',
+                                    gap: 'clamp(0.375rem, 0.9vw, 0.5rem)',
+                                    fontSize: 'clamp(0.625rem, 1.2vw, 0.6875rem)',
+                                    minWidth: 'clamp(100px, 20vw, 130px)',
+                                    ...(isActive ? { color: 'var(--color-text-main)', borderColor: 'var(--color-border-soft)' } : { color: 'var(--color-text-muted)', borderColor: 'transparent' })
+                                }}
+                            >
+                                <Icon size={14} color={tab.color} />
+                                <span className="tab-name">{tab.name}</span>
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
 
             {/* Address Bar */}
@@ -187,11 +208,26 @@ const BrowserMock = () => {
 
             {/* Content Area */}
             <div
-                className="browser-content h-[clamp(300px,50vw,450px)] relative cursor-pointer overflow-hidden"
+                className="browser-content h-[550px] sm:h-[clamp(400px,50vw,500px)] relative cursor-pointer overflow-hidden"
                 onClick={() => {
                     window.open(activeTab.redirectUrl, '_blank');
                 }}
             >
+                {/* Mobile Nav Arrows (Overlay) */}
+                <button
+                    onClick={handlePrevTab}
+                    className="sm:hidden absolute left-2 top-1/2 -translate-y-1/2 z-30 p-2 bg-white/80 backdrop-blur shadow-lg border border-slate-100 rounded-full text-slate-700 hover:scale-110 transition-all active:scale-95"
+                >
+                    <ChevronLeft size={20} />
+                </button>
+
+                <button
+                    onClick={handleNextTab}
+                    className="sm:hidden absolute right-2 top-1/2 -translate-y-1/2 z-30 p-2 bg-white/80 backdrop-blur shadow-lg border border-slate-100 rounded-full text-slate-700 hover:scale-110 transition-all active:scale-95"
+                >
+                    <ChevronRight size={20} />
+                </button>
+
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={activeTab.id}
