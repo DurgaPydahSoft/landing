@@ -1,9 +1,18 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Eye, Target, Lightbulb } from 'lucide-react';
+import { useRef } from 'react';
 
 const AboutUsSection = () => {
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start center", "end center"]
+    });
+
+    const pathLength = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
     return (
-        <section id="about" className="bg-white relative" style={{
+        <section ref={containerRef} id="about" className="bg-white relative" style={{
             paddingTop: 'clamp(4rem, 10vw, 10rem)',
             paddingBottom: 'clamp(4rem, 10vw, 10rem)',
         }}>
@@ -41,23 +50,27 @@ const AboutUsSection = () => {
                             preserveAspectRatio="none"
                             className="overflow-visible"
                         >
-                            {/* Animated Drawing Path */}
+                            {/* Primary Animated Path */}
                             <motion.path
                                 d="M 50 0 C 50 8, 41 8, 41 16 C 41 33, 59 33, 59 50 C 59 67, 41 67, 41 84 C 41 92, 50 92, 50 100"
                                 fill="none"
                                 stroke="var(--primary)"
-                                strokeWidth="4"
+                                strokeWidth="3"
                                 vectorEffect="non-scaling-stroke"
-                                initial={{ pathLength: 0 }}
-                                whileInView={{ pathLength: 1 }}
-                                transition={{
-                                    duration: 3,
-                                    ease: "easeInOut",
-                                    repeat: Infinity,
-                                    repeatType: "reverse",
-                                    repeatDelay: 0.5
+                                style={{ pathLength }}
+                            />
+                            {/* Secondary Parallel Path (Ghost Line) */}
+                            <motion.path
+                                d="M 50 0 C 50 8, 41 8, 41 16 C 41 33, 59 33, 59 50 C 59 67, 41 67, 41 84 C 41 92, 50 92, 50 100"
+                                fill="none"
+                                stroke="var(--primary)"
+                                strokeWidth="3"
+                                strokeOpacity="0.4"
+                                vectorEffect="non-scaling-stroke"
+                                style={{
+                                    pathLength,
+                                    x: 3 // Small offset for the double-line effect
                                 }}
-                                viewport={{ once: true, margin: "-10%" }}
                             />
                         </svg>
                     </div>

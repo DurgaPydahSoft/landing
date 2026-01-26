@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import BrowserMock from './BrowserMock';
 
-const Hero = () => {
+const Hero = ({ onNavigate }) => {
     return (
         <section className="min-h-screen flex items-center relative" style={{
             paddingTop: 'clamp(80px, 15vw, 100px)',
@@ -61,6 +61,7 @@ const Hero = () => {
                             onMouseLeave={(e) => {
                                 e.target.style.boxShadow = 'var(--shadow-soft)';
                             }}
+                            onClick={() => onNavigate('portals')}
                         >
                             Get Started
                         </motion.button>
@@ -86,6 +87,7 @@ const Hero = () => {
                                 e.target.style.backgroundColor = 'white';
                                 e.target.style.borderColor = 'var(--color-border-soft)';
                             }}
+                            onClick={() => onNavigate('portals')}
                         >
                             Explore Portals
                         </motion.button>

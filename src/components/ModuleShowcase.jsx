@@ -12,7 +12,7 @@ const modules = [
         icon: Brain,
         color: '#8b5cf6',
         spanX: 4,
-        spanY: 1,
+        spanY: 2,
         light: true
     },
     {
@@ -22,7 +22,7 @@ const modules = [
         icon: Users,
         color: '#0ea5e9',
         spanX: 2,
-        spanY: 1
+        spanY: 2
     },
     {
         id: 'academic',
@@ -58,7 +58,7 @@ const modules = [
         icon: Home,
         color: '#6366f1',
         spanX: 3,
-        spanY: 1
+        spanY: 2
     },
     {
         id: 'hr',
@@ -67,7 +67,7 @@ const modules = [
         icon: UserRound,
         color: '#ec4899',
         spanX: 3,
-        spanY: 1
+        spanY: 2
     },
     {
         id: 'engage',
@@ -90,6 +90,7 @@ const ModuleShowcase = () => {
             6: 'lg:col-span-6',
         };
         const rowClasses = {
+            3: 'lg:row-span-3',
             2: 'lg:row-span-2',
             1: 'lg:row-span-1',
         };
@@ -98,9 +99,10 @@ const ModuleShowcase = () => {
     };
 
     const getMinHeight = (spanX, spanY) => {
+        if (spanY >= 3) return 'lg:min-h-[420px]';
         if (spanY === 2) return 'lg:min-h-[340px]';
-        if (spanX === 6) return 'lg:min-h-[160px]';
-        return 'min-h-[200px] sm:min-h-[240px] lg:min-h-[160px]';
+        if (spanX === 6) return 'lg:min-h-[180px]';
+        return 'min-h-[250px] sm:min-h-[280px] lg:min-h-[200px]';
     };
 
     return (
@@ -155,14 +157,14 @@ const ModuleShowcase = () => {
                             className={`
                                 ${getGridClasses(mod.spanX, mod.spanY)}
                                 ${getMinHeight(mod.spanX, mod.spanY)}
-                                group relative overflow-hidden rounded-[2rem]
+                                group relative overflow-hidden rounded-[2.5rem]
                                 backdrop-blur-xl transition-all duration-500
                                 hover:-translate-y-2 hover:shadow-2xl
                             `}
                             style={{
-                                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                                border: '1px solid rgba(255, 255, 255, 0.6)',
-                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 2px 4px -1px rgba(0, 0, 0, 0.01)'
+                                backgroundColor: 'white',
+                                border: '1px solid rgba(0, 0, 0, 0.06)',
+                                boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.05)'
                             }}
                         >
                             {/* Hover Gradient Overlay */}

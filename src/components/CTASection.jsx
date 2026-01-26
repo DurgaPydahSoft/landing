@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { useState } from 'react';
 
-const CTASection = () => {
+const CTASection = ({ onNavigate }) => {
     return (
         <section className="relative overflow-hidden" style={{
             paddingTop: 'clamp(2rem, 8vw, 6rem)',
@@ -87,7 +87,7 @@ const CTASection = () => {
                             Join the growing list of forward-thinking entities scaling their operations with Pydah's intelligent ecosystem.
                         </motion.p>
 
-                        <InteractiveButton />
+                        <InteractiveButton onClick={() => onNavigate('portals')} />
                     </div>
                 </motion.div>
             </div>
@@ -95,7 +95,7 @@ const CTASection = () => {
     );
 };
 
-const InteractiveButton = () => {
+const InteractiveButton = ({ onClick }) => {
     return (
         <motion.button
             initial={{ opacity: 0, scale: 0.9 }}
@@ -108,6 +108,7 @@ const InteractiveButton = () => {
                 padding: '1rem 2rem', // Reduced padding
                 fontSize: '1rem' // Slightly smaller font
             }}
+            onClick={onClick}
         >
             <span className="relative z-10">Start Your Journey</span>
             <ArrowRight className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" size={20} />

@@ -55,7 +55,7 @@ const solutions = [
   }
 ];
 
-const Navbar = () => {
+const Navbar = ({ onNavigate }) => {
   const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const closeTimeoutRef = useRef(null);
@@ -82,14 +82,14 @@ const Navbar = () => {
             src="/logo1-2048x1024.png"
             alt="Pydah Logo"
             className="h-[clamp(32px,4vw,40px)] w-auto cursor-pointer"
-            onClick={() => window.location.href = '/'}
+            onClick={() => onNavigate('home')}
           />
         </div>
 
         {/* Desktop Menu */}
         <div className="desktop-menu flex items-center" style={{ gap: 'clamp(1.75rem, 4.5vw, 2.5rem)' }}>
           <a
-            href="#"
+            href="#home"
             className="font-medium transition-colors"
             style={{
               color: 'var(--color-text-muted)',
@@ -100,6 +100,10 @@ const Navbar = () => {
             }}
             onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
             onMouseLeave={(e) => e.target.style.color = 'var(--color-text-muted)'}
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigate('home');
+            }}
           >
             Home
           </a>
@@ -120,7 +124,7 @@ const Navbar = () => {
                 paddingLeft: 'clamp(0.5rem, 1.2vw, 0.625rem)',
                 paddingRight: 'clamp(0.5rem, 1.2vw, 0.625rem)'
               }}
-              onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
+              onClick={() => onNavigate('portals')}
             >
               Our Portals <ChevronDown size={16} />
             </button>
@@ -235,153 +239,162 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed left-0 right-0 bg-white border-t shadow-[0_10px_30px_rgba(0,0,0,0.1)] z-[999]"
-          style={{
-            borderColor: 'var(--color-border-soft)',
-            top: 'clamp(70px, 12vw, 80px)',
-            maxHeight: 'calc(100vh - clamp(70px, 12vw, 80px))',
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            WebkitOverflowScrolling: 'touch',
-            paddingTop: 'clamp(1.25rem, 3vw, 1.5rem)',
-            paddingBottom: 'clamp(1.25rem, 3vw, 1.5rem)',
-            paddingLeft: 'clamp(1rem, 2.5vw, 1.25rem)',
-            paddingRight: 'clamp(1rem, 2.5vw, 1.25rem)'
-          }}
-        >
-          <div className="flex flex-col" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)', minHeight: 'min-content' }}>
-            <a
-              href="#"
-              className="font-medium"
-              style={{
-                color: 'var(--color-text-muted)',
-                paddingTop: 'clamp(0.625rem, 1.5vw, 0.75rem)',
-                paddingBottom: 'clamp(0.625rem, 1.5vw, 0.75rem)'
-              }}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Home
-            </a>
-
-            <div>
-              <button
-                onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
-                className="font-medium flex items-center justify-between w-full bg-transparent border-none cursor-pointer"
+      {
+        isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed left-0 right-0 bg-white border-t shadow-[0_10px_30px_rgba(0,0,0,0.1)] z-[999]"
+            style={{
+              borderColor: 'var(--color-border-soft)',
+              top: 'clamp(70px, 12vw, 80px)',
+              maxHeight: 'calc(100vh - clamp(70px, 12vw, 80px))',
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              WebkitOverflowScrolling: 'touch',
+              paddingTop: 'clamp(1.25rem, 3vw, 1.5rem)',
+              paddingBottom: 'clamp(1.25rem, 3vw, 1.5rem)',
+              paddingLeft: 'clamp(1rem, 2.5vw, 1.25rem)',
+              paddingRight: 'clamp(1rem, 2.5vw, 1.25rem)'
+            }}
+          >
+            <div className="flex flex-col" style={{ gap: 'clamp(0.75rem, 2vw, 1rem)', minHeight: 'min-content' }}>
+              <a
+                href="#home"
+                className="font-medium"
                 style={{
-                  color: isMegaMenuOpen ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                  color: 'var(--color-text-muted)',
                   paddingTop: 'clamp(0.625rem, 1.5vw, 0.75rem)',
                   paddingBottom: 'clamp(0.625rem, 1.5vw, 0.75rem)'
                 }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsMobileMenuOpen(false);
+                  onNavigate('home');
+                }}
               >
-                Our Portals <ChevronDown
-                  size={16}
-                  className={`transition-transform duration-200 ${isMegaMenuOpen ? 'rotate-180' : 'rotate-0'
-                    }`}
-                />
-              </button>
+                Home
+              </a>
 
-              <AnimatePresence>
-                {isMegaMenuOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    style={{ marginTop: 'clamp(0.5rem, 1.2vw, 0.75rem)' }}
-                  >
-                    <div className="flex flex-col" style={{
-                      gap: 'clamp(0.625rem, 1.5vw, 0.75rem)',
-                      paddingLeft: 'clamp(0.75rem, 2vw, 1rem)',
-                      maxHeight: 'none'
-                    }}>
-                      {solutions.map((item, idx) => (
-                        <a
-                          key={idx}
-                          href={item.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex rounded-xl bg-slate-50 transition-all duration-200"
-                          style={{
-                            gap: 'clamp(0.75rem, 1.8vw, 0.875rem)',
-                            padding: 'clamp(0.75rem, 1.8vw, 0.875rem)'
-                          }}
-                          onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                          <div
-                            className="rounded-[10px] flex justify-center items-center flex-shrink-0"
+              <div>
+                <button
+                  onClick={() => setIsMegaMenuOpen(!isMegaMenuOpen)}
+                  className="font-medium flex items-center justify-between w-full bg-transparent border-none cursor-pointer"
+                  style={{
+                    color: isMegaMenuOpen ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                    paddingTop: 'clamp(0.625rem, 1.5vw, 0.75rem)',
+                    paddingBottom: 'clamp(0.625rem, 1.5vw, 0.75rem)'
+                  }}
+                >
+                  Our Portals <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${isMegaMenuOpen ? 'rotate-180' : 'rotate-0'
+                      }`}
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {isMegaMenuOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      style={{ marginTop: 'clamp(0.5rem, 1.2vw, 0.75rem)' }}
+                    >
+                      <div className="flex flex-col" style={{
+                        gap: 'clamp(0.625rem, 1.5vw, 0.75rem)',
+                        paddingLeft: 'clamp(0.75rem, 2vw, 1rem)',
+                        maxHeight: 'none'
+                      }}>
+                        {solutions.map((item, idx) => (
+                          <a
+                            key={idx}
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex rounded-xl bg-slate-50 transition-all duration-200"
                             style={{
-                              width: 'clamp(2.25rem, 3.5vw, 2.5rem)',
-                              height: 'clamp(2.25rem, 3.5vw, 2.5rem)',
-                              backgroundColor: `${item.color}10`,
-                              color: item.color
+                              gap: 'clamp(0.75rem, 1.8vw, 0.875rem)',
+                              padding: 'clamp(0.75rem, 1.8vw, 0.875rem)'
                             }}
+                            onClick={() => setIsMobileMenuOpen(false)}
                           >
-                            <item.icon size={18} />
-                          </div>
-                          <div style={{ minWidth: 0 }}>
-                            <div className="font-bold" style={{
-                              color: 'var(--color-text-main)',
-                              fontSize: 'clamp(0.8125rem, 1.6vw, 0.875rem)',
-                              marginBottom: 'clamp(0.25rem, 0.6vw, 0.375rem)',
-                              lineHeight: '1.3'
-                            }}>
-                              {item.title}
+                            <div
+                              className="rounded-[10px] flex justify-center items-center flex-shrink-0"
+                              style={{
+                                width: 'clamp(2.25rem, 3.5vw, 2.5rem)',
+                                height: 'clamp(2.25rem, 3.5vw, 2.5rem)',
+                                backgroundColor: `${item.color}10`,
+                                color: item.color
+                              }}
+                            >
+                              <item.icon size={18} />
                             </div>
-                            <div className="leading-snug" style={{
-                              color: 'var(--color-text-muted)',
-                              fontSize: 'clamp(0.6875rem, 1.3vw, 0.75rem)',
-                              lineHeight: '1.4'
-                            }}>
-                              {item.desc}
+                            <div style={{ minWidth: 0 }}>
+                              <div className="font-bold" style={{
+                                color: 'var(--color-text-main)',
+                                fontSize: 'clamp(0.8125rem, 1.6vw, 0.875rem)',
+                                marginBottom: 'clamp(0.25rem, 0.6vw, 0.375rem)',
+                                lineHeight: '1.3'
+                              }}>
+                                {item.title}
+                              </div>
+                              <div className="leading-snug" style={{
+                                color: 'var(--color-text-muted)',
+                                fontSize: 'clamp(0.6875rem, 1.3vw, 0.75rem)',
+                                lineHeight: '1.4'
+                              }}>
+                                {item.desc}
+                              </div>
                             </div>
-                          </div>
-                        </a>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                          </a>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <a
+                href="#about"
+                className="font-medium"
+                style={{
+                  color: 'var(--color-text-muted)',
+                  paddingTop: 'clamp(0.625rem, 1.5vw, 0.75rem)',
+                  paddingBottom: 'clamp(0.625rem, 1.5vw, 0.75rem)'
+                }}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  onNavigate('home');
+                }}
+              >
+                About Us
+              </a>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                className="text-white rounded-md font-semibold"
+                style={{
+                  backgroundColor: 'var(--color-primary)',
+                  boxShadow: 'var(--shadow-soft)',
+                  marginTop: 'clamp(0.5rem, 1.2vw, 0.75rem)',
+                  paddingLeft: 'clamp(1.25rem, 3vw, 1.5rem)',
+                  paddingRight: 'clamp(1.25rem, 3vw, 1.5rem)',
+                  paddingTop: 'clamp(0.75rem, 1.8vw, 0.875rem)',
+                  paddingBottom: 'clamp(0.75rem, 1.8vw, 0.875rem)'
+                }}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Get Help
+              </motion.button>
             </div>
-
-            <a
-              href="#about"
-              className="font-medium"
-              style={{
-                color: 'var(--color-text-muted)',
-                paddingTop: 'clamp(0.625rem, 1.5vw, 0.75rem)',
-                paddingBottom: 'clamp(0.625rem, 1.5vw, 0.75rem)'
-              }}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              About Us
-            </a>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              className="text-white rounded-md font-semibold"
-              style={{
-                backgroundColor: 'var(--color-primary)',
-                boxShadow: 'var(--shadow-soft)',
-                marginTop: 'clamp(0.5rem, 1.2vw, 0.75rem)',
-                paddingLeft: 'clamp(1.25rem, 3vw, 1.5rem)',
-                paddingRight: 'clamp(1.25rem, 3vw, 1.5rem)',
-                paddingTop: 'clamp(0.75rem, 1.8vw, 0.875rem)',
-                paddingBottom: 'clamp(0.75rem, 1.8vw, 0.875rem)'
-              }}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Get Help
-            </motion.button>
-          </div>
-        </motion.div>
-      )}
-    </nav>
+          </motion.div>
+        )
+      }
+    </nav >
   );
 };
 
