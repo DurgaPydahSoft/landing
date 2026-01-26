@@ -3,80 +3,88 @@ import BrowserMock from './BrowserMock';
 
 const Hero = () => {
     return (
-        <section style={{
-            minHeight: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            paddingTop: '80px', // For navbar
-            position: 'relative',
-            overflow: 'hidden'
+        <section className="min-h-screen flex items-center relative" style={{ 
+            paddingTop: 'clamp(80px, 15vw, 100px)',
+            paddingBottom: 'clamp(2rem, 4vw, 3rem)',
+            overflowX: 'hidden'
         }}>
-            <div className="section-container" style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1.4fr', // Even more weight to browser
+            <div className="section-container grid grid-cols-1 md:grid-cols-[1fr_1.4fr] items-center w-full" style={{ 
                 gap: 'clamp(2rem, 5vw, 6rem)',
-                alignItems: 'center',
-                width: '100%',
-                maxWidth: '1600px', // Overriding global max-width for Hero
-                paddingTop: '2rem'
+                paddingTop: 'clamp(2rem, 4vw, 3rem)',
+                paddingBottom: 'clamp(2rem, 4vw, 3rem)'
             }}>
                 {/* Left Content */}
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    className="order-1 md:order-1"
                 >
-                    <h1 style={{
-                        fontSize: 'clamp(3rem, 6vw, 4.5rem)', // Slightly larger
-                        lineHeight: 1.05,
-                        fontWeight: 800,
-                        marginBottom: '1.5rem',
-                        color: 'var(--text-main)',
-                        letterSpacing: '-0.03em'
+                    <h1 className="text-[clamp(2rem,6vw,4.5rem)] leading-[1.05] font-extrabold tracking-tight text-center md:text-left" style={{ 
+                        color: 'var(--color-text-main)', 
+                        marginBottom: 'clamp(1.5rem, 3.5vw, 2rem)'
                     }}>
                         Integrated <br />
-                        <span style={{
-                            background: 'linear-gradient(90deg, var(--primary), var(--secondary))',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent'
-                        }}>Institutional Solution</span> <br />
+                        <span className="bg-gradient-to-r bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--color-secondary))' }}>
+                            Institutional Solution
+                        </span> <br />
                         for Excellence.
                     </h1>
-                    <p style={{
-                        fontSize: '1.125rem',
-                        color: 'var(--text-muted)',
-                        marginBottom: '2.5rem',
-                        maxWidth: '500px'
+                    <p className="text-[clamp(1rem,2vw,1.125rem)] max-w-[500px] mx-auto md:mx-0 text-center md:text-left" style={{ 
+                        color: 'var(--color-text-muted)', 
+                        marginBottom: 'clamp(2rem, 4.5vw, 2.5rem)',
+                        lineHeight: '1.6'
                     }}>
                         Experience the smoothness of high-performance management.
                         Automate portals, hostels, HRMS, and inventory in one elegant interface.
                     </p>
-                    <div style={{ display: 'flex', gap: '1rem' }}>
+                    <div className="flex justify-center md:justify-start flex-wrap" style={{ 
+                        gap: 'clamp(0.875rem, 2vw, 1rem)'
+                    }}>
                         <motion.button
                             whileHover={{ scale: 1.02, y: -2 }}
                             whileTap={{ scale: 0.98 }}
-                            style={{
-                                padding: '1rem 2rem',
-                                backgroundColor: 'var(--primary)',
-                                color: 'white',
-                                borderRadius: 'var(--radius-md)',
-                                fontWeight: 700,
-                                fontSize: '1rem',
-                                boxShadow: 'var(--shadow-soft)'
+                            className="text-white rounded-md font-bold whitespace-nowrap transition-all duration-200"
+                            style={{ 
+                                backgroundColor: 'var(--color-primary)', 
+                                boxShadow: 'var(--shadow-soft)',
+                                paddingLeft: 'clamp(1.5rem, 3.5vw, 2rem)',
+                                paddingRight: 'clamp(1.5rem, 3.5vw, 2rem)',
+                                paddingTop: 'clamp(0.875rem, 2vw, 1rem)',
+                                paddingBottom: 'clamp(0.875rem, 2vw, 1rem)',
+                                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                                lineHeight: '1.5'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.boxShadow = '0 15px 30px -5px rgba(99, 102, 241, 0.3)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.boxShadow = 'var(--shadow-soft)';
                             }}
                         >
                             Get Started
                         </motion.button>
                         <motion.button
-                            whileHover={{ scale: 1.02, backgroundColor: 'rgba(99, 102, 241, 0.05)' }}
+                            whileHover={{ scale: 1.02, y: -2 }}
                             whileTap={{ scale: 0.98 }}
-                            style={{
-                                padding: '1rem 2rem',
-                                border: '1px solid var(--border-soft)',
-                                borderRadius: 'var(--radius-md)',
-                                fontWeight: 600,
-                                color: 'var(--text-main)',
-                                backgroundColor: 'white'
+                            className="rounded-md font-semibold bg-white whitespace-nowrap transition-all duration-200"
+                            style={{ 
+                                border: '1px solid var(--color-border-soft)', 
+                                color: 'var(--color-text-main)',
+                                paddingLeft: 'clamp(1.5rem, 3.5vw, 2rem)',
+                                paddingRight: 'clamp(1.5rem, 3.5vw, 2rem)',
+                                paddingTop: 'clamp(0.875rem, 2vw, 1rem)',
+                                paddingBottom: 'clamp(0.875rem, 2vw, 1rem)',
+                                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                                lineHeight: '1.5'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.target.style.backgroundColor = 'rgba(99, 102, 241, 0.05)';
+                                e.target.style.borderColor = 'var(--color-primary)';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.target.style.backgroundColor = 'white';
+                                e.target.style.borderColor = 'var(--color-border-soft)';
                             }}
                         >
                             Explore Portals
@@ -87,14 +95,9 @@ const Hero = () => {
                 {/* Right Content - Browser Mock */}
                 <motion.div
                     initial={{ opacity: 0, scale: 0.85, x: 50 }}
-                    animate={{ opacity: 1, scale: 1.1, x: 0 }} // Scaling up to 1.1 for "bigger" look
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
                     transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
-                    style={{
-                        perspective: '2000px',
-                        transformOrigin: 'center left',
-                        width: '100%',
-                        zIndex: 10
-                    }}
+                    className="[perspective:2000px] origin-center w-full z-10 order-2"
                 >
                     <motion.div
                         animate={{
@@ -110,8 +113,8 @@ const Hero = () => {
                         <BrowserMock />
                     </motion.div>
 
-                    {/* Decorative SVG elements */}
-                    <div style={{ position: 'absolute', top: '-10%', right: '-10%', zIndex: -1 }}>
+                    {/* Decorative SVG elements - Hidden on mobile */}
+                    <div className="hero-decorative absolute -top-[10%] -right-[10%] -z-10 hidden md:block">
                         <svg width="200" height="200" viewBox="0 0 200 200">
                             <motion.circle
                                 cx="100" cy="100" r="80"

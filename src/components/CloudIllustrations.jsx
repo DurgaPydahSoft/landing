@@ -2,15 +2,7 @@ import { motion } from 'framer-motion';
 
 const CloudIllustrations = () => {
     return (
-        <div style={{
-            position: 'relative',
-            width: '100%',
-            height: '400px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            overflow: 'visible'
-        }}>
+        <div className="relative w-full h-[400px] flex justify-center items-center overflow-visible">
             {/* Central Node */}
             <motion.div
                 animate={{
@@ -18,18 +10,8 @@ const CloudIllustrations = () => {
                     rotate: [0, 5, 0]
                 }}
                 transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                style={{
-                    zIndex: 10,
-                    width: '120px',
-                    height: '120px',
-                    background: 'white',
-                    borderRadius: '30px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    boxShadow: 'var(--shadow-glass)',
-                    border: '1px solid var(--border-soft)'
-                }}
+                className="z-10 w-[120px] h-[120px] bg-white rounded-[30px] flex justify-center items-center border"
+                style={{ boxShadow: 'var(--shadow-glass)', borderColor: 'var(--color-border-soft)' }}
             >
                 <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" strokeWidth="1.5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-5.25v9" />
@@ -51,19 +33,7 @@ const CloudIllustrations = () => {
                         repeat: Infinity,
                         ease: "easeInOut"
                     }}
-                    style={{
-                        position: 'absolute',
-                        width: '80px',
-                        height: '80px',
-                        background: 'rgba(255, 255, 255, 0.6)',
-                        backdropFilter: 'blur(8px)',
-                        borderRadius: '20px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        border: '1px solid rgba(255, 255, 255, 0.5)',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
-                    }}
+                    className="absolute w-20 h-20 bg-white/60 backdrop-blur-md rounded-[20px] flex justify-center items-center border border-white/50 shadow-[0_4px_12px_rgba(0,0,0,0.03)]"
                 >
                     <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" strokeWidth="2">
                         {i === 0 && <circle cx="12" cy="12" r="9" />}
@@ -76,8 +46,9 @@ const CloudIllustrations = () => {
 
             {/* Connecting Lines (Simulated by subtle strokes) */}
             <svg
-                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: -1 }}
-                viewBox="0 0 100 100" preserveAspectRatio="none"
+                className="absolute top-0 left-0 w-full h-full -z-10"
+                viewBox="0 0 100 100"
+                preserveAspectRatio="none"
             >
                 <motion.path
                     d="M50 50 Q 70 30, 80 50"

@@ -3,28 +3,42 @@ import { Eye, Target, Lightbulb } from 'lucide-react';
 
 const AboutUsSection = () => {
     return (
-        <section id="about" style={{
-            padding: '10rem 0',
-            background: '#ffffff',
-            position: 'relative',
-            overflow: 'hidden'
+        <section id="about" className="bg-white relative" style={{ 
+            paddingTop: 'clamp(4rem, 10vw, 10rem)',
+            paddingBottom: 'clamp(4rem, 10vw, 10rem)',
+            overflowX: 'hidden'
         }}>
             <div className="section-container">
-                <div style={{ textAlign: 'center', marginBottom: '8rem' }}>
+                <div className="text-center" style={{ 
+                    marginBottom: 'clamp(3rem, 8vw, 6rem)'
+                }}>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        style={{ fontSize: 'clamp(3rem, 5vw, 4rem)', fontWeight: 800, marginBottom: '1.5rem', color: '#0f172a', letterSpacing: '-0.03em' }}
+                        className="font-extrabold text-slate-900 tracking-tight"
+                        style={{ 
+                            fontSize: 'clamp(2rem, 5vw, 4rem)',
+                            lineHeight: '1.1',
+                            marginBottom: 'clamp(1.5rem, 3.5vw, 2rem)'
+                        }}
                     >
-                        About <span style={{ color: 'var(--primary)' }}>Us</span>
+                        About <span style={{ color: 'var(--color-primary)' }}>Us</span>
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 }}
-                        style={{ color: '#64748b', maxWidth: '750px', margin: '0 auto', lineHeight: '1.8', fontSize: '1.1rem' }}
+                        className="leading-relaxed"
+                        style={{ 
+                            color: 'var(--color-text-muted)',
+                            maxWidth: '750px',
+                            fontSize: 'clamp(1rem, 2vw, 1.1rem)',
+                            lineHeight: '1.6',
+                            margin: '0 auto',
+                            textAlign: 'center'
+                        }}
                     >
                         Pydah stands at the intersection of institutional automation and human-centric design,
                         transforming fragmented legacy systems into intelligent, interconnected ecosystems.
@@ -32,25 +46,12 @@ const AboutUsSection = () => {
                 </div>
 
                 {/* Branching Connection Container */}
-                <div style={{
-                    position: 'relative',
+                <div className="relative flex flex-col" style={{ 
                     maxWidth: '1100px',
-                    margin: '0 auto',
-                    display: 'flex',
-                    flexDirection: 'column'
+                    margin: '0 auto'
                 }}>
-
-                    {/* Main Vertical Spine (SVG) */}
-                    <div style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: '50%',
-                        width: '2px',
-                        height: '100%',
-                        pointerEvents: 'none',
-                        zIndex: 1,
-                        transform: 'translateX(-50%)'
-                    }}>
+                    {/* Main Vertical Spine (SVG) - Hidden on mobile */}
+                    <div className="about-spine absolute top-0 left-1/2 -translate-x-1/2 w-0.5 h-full pointer-events-none z-10 hidden md:block">
                         <svg width="2" height="100%" preserveAspectRatio="none">
                             <motion.line
                                 x1="1" y1="0" x2="1" y2="100%"
@@ -66,7 +67,7 @@ const AboutUsSection = () => {
                     </div>
 
                     {/* Cards Content */}
-                    <div style={{ position: 'relative', zIndex: 2 }}>
+                    <div className="relative z-20">
                         <BranchBlock
                             title="Our Vision"
                             icon={<Eye size={28} color="var(--primary)" />}
@@ -99,43 +100,34 @@ const AboutUsSection = () => {
 
 const BranchBlock = ({ title, icon, content, side, delay }) => {
     return (
-        <div style={{ position: 'relative', width: '100%', marginBottom: '4rem' }}>
-
-            {/* Horizontal Branch - Perfectly Linked to Spine and Card */}
-            <div style={{
-                position: 'absolute',
-                top: '50%',
-                [side === 'left' ? 'right' : 'left']: '50%',
-                width: '10%', // From spine (50%) to card (which is 40% wide)
-                height: '2px',
-                transform: 'translateY(-50%)',
-                zIndex: 1
-            }}>
+        <div className="relative w-full" style={{ 
+            marginBottom: 'clamp(2rem, 5vw, 4rem)'
+        }}>
+            {/* Horizontal Branch - Hidden on mobile */}
+            <div className={`branch-line absolute top-1/2 -translate-y-1/2 z-10 hidden md:block ${
+                side === 'left' ? 'right-1/2 w-[10%]' : 'left-1/2 w-[10%]'
+            }`}>
                 <motion.div
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: delay + 0.3 }}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                        backgroundColor: 'var(--primary)',
-                        opacity: 0.3,
-                        transformOrigin: side === 'left' ? 'right' : 'left'
+                    className={`w-full opacity-30 ${
+                        side === 'left' ? 'origin-right' : 'origin-left'
+                    }`}
+                    style={{ 
+                        backgroundColor: 'var(--color-primary)',
+                        height: 'clamp(0.125rem, 0.3vw, 0.25rem)'
                     }}
                 />
 
                 {/* Junction Point on Spine */}
-                <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    [side === 'left' ? 'right' : 'left']: '0',
-                    width: '8px',
-                    height: '8px',
-                    background: 'var(--primary)',
-                    borderRadius: '50%',
-                    transform: `translate(${side === 'left' ? '50%' : '-50%'}, -50%)`,
-                    boxShadow: '0 0 10px rgba(99, 102, 241, 0.3)'
+                <div className={`absolute top-1/2 -translate-y-1/2 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.3)] ${
+                    side === 'left' ? 'right-0 translate-x-1/2' : 'left-0 -translate-x-1/2'
+                }`} style={{ 
+                    backgroundColor: 'var(--color-primary)',
+                    width: 'clamp(0.5rem, 1vw, 0.625rem)',
+                    height: 'clamp(0.5rem, 1vw, 0.625rem)'
                 }} />
             </div>
 
@@ -144,56 +136,47 @@ const BranchBlock = ({ title, icon, content, side, delay }) => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay }}
-                style={{
-                    display: 'flex',
-                    justifyContent: side === 'left' ? 'flex-start' : 'flex-end',
-                    alignItems: 'center'
-                }}
+                className={`flex items-center w-full ${
+                    side === 'left' ? 'justify-center md:justify-start' : 'justify-center md:justify-end'
+                }`}
             >
-                <div style={{
-                    width: '40%',
-                    padding: '3rem',
-                    background: 'white',
-                    borderRadius: '40px',
-                    border: '1px solid #f1f5f9',
+                <div className="branch-card bg-white border border-slate-100 relative flex flex-col md:w-[40%] md:max-w-none" style={{ 
+                    maxWidth: '500px',
+                    padding: 'clamp(1.5rem, 3.5vw, 2.5rem)',
+                    borderRadius: 'clamp(24px, 5vw, 40px)',
                     boxShadow: '0 20px 50px rgba(0,0,0,0.03)',
-                    position: 'relative',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1.5rem'
+                    gap: 'clamp(1.25rem, 3vw, 1.5rem)'
                 }}>
-                    {/* Linked Dot on Card Edge */}
-                    <div style={{
-                        position: 'absolute',
-                        top: '50%',
-                        [side === 'left' ? 'right' : 'left']: '-5px',
-                        width: '10px',
-                        height: '10px',
-                        background: 'var(--primary)',
-                        borderRadius: '50%',
-                        transform: 'translateY(-50%)',
-                        boxShadow: '0 0 12px rgba(99, 102, 241, 0.5)',
-                        zIndex: 3
+                    {/* Linked Dot on Card Edge - Hidden on mobile */}
+                    <div className={`branch-dot absolute top-1/2 -translate-y-1/2 rounded-full shadow-[0_0_12px_rgba(99,102,241,0.5)] z-30 hidden md:block ${
+                        side === 'left' ? '-right-1.5' : '-left-1.5'
+                    }`} style={{ 
+                        backgroundColor: 'var(--color-primary)',
+                        width: 'clamp(0.625rem, 1.2vw, 0.75rem)',
+                        height: 'clamp(0.625rem, 1.2vw, 0.75rem)'
                     }} />
 
-                    <div style={{
-                        width: '56px',
-                        height: '56px',
-                        borderRadius: '16px',
-                        background: '#f8fafc',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        border: '1px solid #f1f5f9'
+                    <div className="rounded-2xl bg-slate-50 flex justify-center items-center border border-slate-100 flex-shrink-0" style={{ 
+                        width: 'clamp(3rem, 5vw, 3.5rem)',
+                        height: 'clamp(3rem, 5vw, 3.5rem)'
                     }}>
                         {icon}
                     </div>
 
                     <div>
-                        <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.8rem', letterSpacing: '-0.02em' }}>
+                        <h3 className="font-extrabold tracking-tight" style={{ 
+                            color: 'var(--color-text-main)',
+                            fontSize: 'clamp(1.5rem, 4vw, 1.75rem)',
+                            marginBottom: 'clamp(0.75rem, 1.8vw, 1rem)',
+                            lineHeight: '1.3'
+                        }}>
                             {title}
                         </h3>
-                        <p style={{ color: '#64748b', fontSize: '1rem', lineHeight: 1.7 }}>
+                        <p className="leading-relaxed" style={{ 
+                            color: 'var(--color-text-muted)',
+                            fontSize: 'clamp(0.95rem, 2vw, 1rem)',
+                            lineHeight: '1.6'
+                        }}>
                             {content}
                         </p>
                     </div>
