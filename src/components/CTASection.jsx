@@ -5,8 +5,8 @@ import { useState } from 'react';
 const CTASection = () => {
     return (
         <section className="relative overflow-hidden" style={{
-            paddingTop: 'clamp(4rem, 8vw, 6rem)',
-            paddingBottom: 'clamp(4rem, 8vw, 6rem)',
+            paddingTop: 'clamp(2rem, 8vw, 6rem)',
+            paddingBottom: 'clamp(2rem, 8vw, 6rem)',
         }}>
             <div className="section-container relative z-10">
                 <motion.div
@@ -14,7 +14,7 @@ const CTASection = () => {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, type: "spring", bounce: 0.4 }}
-                    className="relative overflow-hidden rounded-[2.5rem] text-center"
+                    className="relative overflow-hidden rounded-3xl sm:rounded-[2.5rem] text-center"
                     style={{
                         background: 'linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%)',
                         boxShadow: '0 25px 50px -12px rgba(79, 70, 229, 0.5)'
@@ -48,7 +48,7 @@ const CTASection = () => {
                     </div>
 
                     <div className="relative z-10 flex flex-col items-center" style={{
-                        padding: 'clamp(3rem, 6vw, 5rem)'
+                        padding: 'clamp(1.5rem, 6vw, 5rem)'
                     }}>
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -63,7 +63,7 @@ const CTASection = () => {
                         <motion.h2
                             className="font-extrabold text-white tracking-tight leading-tight"
                             style={{
-                                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                                fontSize: 'clamp(1.75rem, 5vw, 3.5rem)',
                                 marginBottom: '1.5rem',
                                 maxWidth: '1000px'
                             }}
@@ -77,7 +77,7 @@ const CTASection = () => {
                         <motion.p
                             className="text-indigo-100/90 leading-relaxed mb-10"
                             style={{
-                                fontSize: 'clamp(1.1rem, 2vw, 1.25rem)',
+                                fontSize: 'clamp(1rem, 2vw, 1.25rem)',
                                 maxWidth: '600px',
                             }}
                             initial={{ opacity: 0, y: 20 }}
@@ -105,8 +105,8 @@ const InteractiveButton = () => {
             whileTap={{ scale: 0.95 }}
             className="group relative inline-flex items-center gap-3 bg-amber-400 text-amber-950 font-bold rounded-full overflow-hidden shadow-xl"
             style={{
-                padding: '1.25rem 2.5rem',
-                fontSize: '1.1rem'
+                padding: '1rem 2rem', // Reduced padding
+                fontSize: '1rem' // Slightly smaller font
             }}
         >
             <span className="relative z-10">Start Your Journey</span>

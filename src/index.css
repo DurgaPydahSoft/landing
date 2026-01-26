@@ -206,3 +206,19 @@ a:focus-visible {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* Animated Text Gradient */
+@keyframes text-shine {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.animate-text-gradient {
+  background-size: 200% auto;
+  animation: text-shine 4s linear infinite;
+}

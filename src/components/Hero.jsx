@@ -3,12 +3,12 @@ import BrowserMock from './BrowserMock';
 
 const Hero = () => {
     return (
-        <section className="min-h-screen flex items-center relative" style={{ 
+        <section className="min-h-screen flex items-center relative" style={{
             paddingTop: 'clamp(80px, 15vw, 100px)',
             paddingBottom: 'clamp(2rem, 4vw, 3rem)',
             overflowX: 'hidden'
         }}>
-            <div className="section-container grid grid-cols-1 md:grid-cols-[1fr_1.4fr] items-center w-full" style={{ 
+            <div className="section-container grid grid-cols-1 md:grid-cols-[1fr_1.4fr] items-center w-full" style={{
                 gap: 'clamp(2rem, 5vw, 6rem)',
                 paddingTop: 'clamp(2rem, 4vw, 3rem)',
                 paddingBottom: 'clamp(2rem, 4vw, 3rem)'
@@ -20,33 +20,33 @@ const Hero = () => {
                     transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     className="order-1 md:order-1"
                 >
-                    <h1 className="text-[clamp(2rem,6vw,4.5rem)] leading-[1.05] font-extrabold tracking-tight text-center md:text-left" style={{ 
-                        color: 'var(--color-text-main)', 
+                    <h1 className="text-[clamp(2rem,6vw,4.5rem)] leading-[1.05] font-extrabold tracking-tight text-center md:text-left" style={{
+                        color: 'var(--color-text-main)',
                         marginBottom: 'clamp(1.5rem, 3.5vw, 2rem)'
                     }}>
-                        Integrated <br />
-                        <span className="bg-gradient-to-r bg-clip-text text-transparent" style={{ backgroundImage: 'linear-gradient(90deg, var(--color-primary), var(--color-secondary))' }}>
-                            Institutional Solution
+                        The Official <br />
+                        <span className="bg-gradient-to-r bg-clip-text text-transparent animate-text-gradient" style={{ backgroundImage: 'linear-gradient(to right, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-primary) 100%)' }}>
+                            CRM Platform
                         </span> <br />
-                        for Excellence.
+                        for Pydah Organization.
                     </h1>
-                    <p className="text-[clamp(1rem,2vw,1.125rem)] max-w-[500px] mx-auto md:mx-0 text-center md:text-left" style={{ 
-                        color: 'var(--color-text-muted)', 
+                    <p className="text-[clamp(1rem,2vw,1.125rem)] max-w-[500px] mx-auto md:mx-0 text-center md:text-left" style={{
+                        color: 'var(--color-text-muted)',
                         marginBottom: 'clamp(2rem, 4.5vw, 2.5rem)',
                         lineHeight: '1.6'
                     }}>
                         Experience the smoothness of high-performance management.
                         Automate portals, hostels, HRMS, and inventory in one elegant interface.
                     </p>
-                    <div className="flex justify-center md:justify-start flex-wrap" style={{ 
+                    <div className="flex justify-center md:justify-start flex-wrap" style={{
                         gap: 'clamp(0.875rem, 2vw, 1rem)'
                     }}>
                         <motion.button
                             whileHover={{ scale: 1.02, y: -2 }}
                             whileTap={{ scale: 0.98 }}
                             className="text-white rounded-md font-bold whitespace-nowrap transition-all duration-200"
-                            style={{ 
-                                backgroundColor: 'var(--color-primary)', 
+                            style={{
+                                backgroundColor: 'var(--color-primary)',
                                 boxShadow: 'var(--shadow-soft)',
                                 paddingLeft: 'clamp(1.5rem, 3.5vw, 2rem)',
                                 paddingRight: 'clamp(1.5rem, 3.5vw, 2rem)',
@@ -68,8 +68,8 @@ const Hero = () => {
                             whileHover={{ scale: 1.02, y: -2 }}
                             whileTap={{ scale: 0.98 }}
                             className="rounded-md font-semibold bg-white whitespace-nowrap transition-all duration-200"
-                            style={{ 
-                                border: '1px solid var(--color-border-soft)', 
+                            style={{
+                                border: '1px solid var(--color-border-soft)',
                                 color: 'var(--color-text-main)',
                                 paddingLeft: 'clamp(1.5rem, 3.5vw, 2rem)',
                                 paddingRight: 'clamp(1.5rem, 3.5vw, 2rem)',
