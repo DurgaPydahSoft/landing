@@ -180,6 +180,24 @@ const ModuleShowcase = () => {
                                 }}
                             />
 
+                            {/* Decorative Colored Blur Blob */}
+                            <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-[60px] opacity-0 group-hover:opacity-20 transition-all duration-700"
+                                style={{ backgroundColor: mod.color }}
+                            />
+
+                            {/* Large Watermark Icon Art */}
+                            <div className="absolute -bottom-6 -right-6 opacity-[0.06] group-hover:opacity-[0.12] transition-all duration-500 transform group-hover:scale-110 group-hover:-rotate-12 pointer-events-none">
+                                <mod.icon size={180} strokeWidth={1} color={mod.color} />
+                            </div>
+
+                            {/* Corner Tech Ornament */}
+                            <div className="absolute top-0 right-0 p-6 opacity-40 group-hover:opacity-100 transition-all duration-500 pointer-events-none">
+                                <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
+                                    <path d="M 60 0 L 60 20 M 60 0 L 40 0" stroke={mod.color} strokeWidth="2" strokeOpacity="0.3" />
+                                    <circle cx="60" cy="0" r="3" fill={mod.color} fillOpacity="0.5" />
+                                </svg>
+                            </div>
+
                             <div className="relative z-10 h-full flex flex-col justify-between" style={{
                                 padding: 'clamp(1.5rem, 3.5vw, 2.5rem)'
                             }}>
@@ -236,10 +254,6 @@ const ModuleShowcase = () => {
                                 </div>
                             </div>
 
-                            {/* Decorative Colored Blur Blob */}
-                            <div className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full blur-[50px] opacity-0 group-hover:opacity-20 transition-all duration-500"
-                                style={{ backgroundColor: mod.color }}
-                            />
                         </motion.div>
                     ))}
                 </div>

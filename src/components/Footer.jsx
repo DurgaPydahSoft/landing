@@ -35,11 +35,12 @@ const Footer = () => {
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.05, duration: 0.5 }}
                                 whileHover={{
-                                    scale: 1.2,
-                                    color: '#6366f1',
-                                    textShadow: '0 0 20px rgba(99, 102, 241, 0.5)'
+                                    scale: 1.25,
+                                    color: 'var(--color-primary)',
+                                    textShadow: '0 0 25px rgba(99, 102, 241, 0.6)',
+                                    transition: { type: "spring", stiffness: 400, damping: 10 }
                                 }}
-                                className="inline-block cursor-default transition-all duration-300"
+                                className="inline-block cursor-default"
                             >
                                 {letter}
                             </motion.span>

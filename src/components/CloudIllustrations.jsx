@@ -39,7 +39,6 @@ const EcosystemDiagram = () => {
                 {/* Central Logo for Mobile */}
                 <div className="flex justify-center mb-6">
                     <div className="w-24 h-24 bg-white rounded-full shadow-lg flex items-center justify-center p-4 border border-indigo-50 relative">
-                        <div className="absolute inset-0 rounded-full animate-ping opacity-10 bg-indigo-400" />
                         <img
                             src="/pydah-logo.png"
                             alt="Pydah Logo"
@@ -55,10 +54,10 @@ const EcosystemDiagram = () => {
                             className="bg-white rounded-md py-8 px-4 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.1)] border border-slate-100 flex flex-col items-center text-center gap-3"
                         >
                             <div
-                                className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm text-lg"
-                                style={{ backgroundColor: `${mod.color}20` }}
+                                className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm"
+                                style={{ backgroundColor: `${mod.color}20`, color: mod.color }}
                             >
-                                {mod.emoji}
+                                <mod.icon size={20} strokeWidth={2} />
                             </div>
                             <span className="text-[11px] font-bold text-slate-700 uppercase tracking-wide leading-tight">
                                 {mod.label}
