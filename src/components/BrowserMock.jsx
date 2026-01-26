@@ -117,10 +117,12 @@ const BrowserMock = () => {
     return (
         <div className="browser-mock w-full max-w-[900px] rounded-[clamp(12px,3vw,20px)] overflow-hidden relative mx-auto" style={{ boxShadow: 'var(--shadow-glass)', backgroundColor: 'var(--color-bg-white)', border: '1px solid var(--color-border-soft)' }}>
             {/* Window Controls & Tab Bar Merged */}
-            <div className="bg-slate-100 flex items-center border-b relative justify-center" style={{
+            <div className="bg-slate-100 flex items-center border-b relative" style={{
                 borderColor: 'var(--color-border-soft)',
                 paddingTop: 'clamp(0.5rem, 1.2vw, 0.75rem)',
                 paddingBottom: 'clamp(0.25rem, 0.6vw, 0.25rem)',
+                paddingLeft: 'clamp(0.75rem, 1.8vw, 1rem)',
+                paddingRight: 'clamp(0.75rem, 1.8vw, 1rem)',
                 gap: 'clamp(0.75rem, 1.5vw, 1rem)'
             }}>
                 {/* Traffic Lights - Hidden on Mobile */}
