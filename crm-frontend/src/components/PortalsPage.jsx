@@ -23,7 +23,7 @@ const portalDetails = [
         features: ['Personalized Course Timetable', 'Attendance & Grade Tracking', 'Digital Library Access', 'Campus Event Calendar'],
         color: '#f59e0b',
         image: 'https://colorlib.com/wp/wp-content/uploads/sites/2/free-dashboard-templates.jpg',
-        url: 'http://localhost:3000/student/login',
+        url: 'https://pydahsdms.vercel.app/student/login',
         portalId: 'student-portal'
     },
     {
