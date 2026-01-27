@@ -79,7 +79,7 @@ const Navbar = ({ onNavigate }) => {
       <div className="section-container flex justify-between items-center">
         <div className="flex items-center">
           <img
-            src="/logo1-2048x1024.png"
+            src="/pydah-logo.png"
             alt="Pydah Logo"
             className="h-[clamp(32px,4vw,40px)] w-auto cursor-pointer"
             onClick={() => onNavigate('home')}
