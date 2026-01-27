@@ -17,13 +17,32 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 
 // CORS configuration
+// Parse CORS_ORIGIN from env (comma-separated) and add production URLs
+const corsOrigins = [];
+if (process.env.CORS_ORIGIN) {
+  // Split comma-separated origins
+  corsOrigins.push(...process.env.CORS_ORIGIN.split(',').map(origin => origin.trim()));
+} else {
+  // Default localhost origins
+  corsOrigins.push('http://localhost:5173');
+}
+
+// Add production URLs
+const productionOrigins = [
+  'https://crm.pydah.edu.in',           // Production CRM frontend
+  'https://pydahsdms.vercel.app',        // Production student portal
+  'http://localhost:3001',               // Development portal application
+  'http://localhost:3000',               // Local student portal application
+  'http://localhost:5173'                // Local CRM frontend
+];
+
+// Combine and remove duplicates
+const allOrigins = [...new Set([...corsOrigins, ...productionOrigins])];
+
+console.log(`[CORS] Allowed origins:`, allOrigins);
+
 app.use(cors({
-  origin: [
-    process.env.CORS_ORIGIN || 'http://localhost:5173',
-    'http://localhost:3001', // Development portal application
-    'http://localhost:3000', // Student portal application
-    'http://localhost:5173'  // CRM frontend
-  ],
+  origin: allOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']

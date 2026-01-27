@@ -37,7 +37,7 @@ function App() {
   return (
     <div className="app">
       <div className="cloud-bg" />
-      {currentPage !== 'login' && <Navbar onNavigate={handleNavigate} />}
+      <Navbar onNavigate={handleNavigate} />
 
       <main>
         {currentPage === 'home' ? (
@@ -62,7 +62,7 @@ function App() {
         ) : null}
       </main>
 
-      {currentPage !== 'login' && <Footer />}
+      <Footer />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, User, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { Lock, User, ArrowRight, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 import { authAPI } from '../services/api';
 
 const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
@@ -11,7 +11,8 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState('');
-  
+  const [showPassword, setShowPassword] = useState(false);
+
   // Check if this is the student portal (for unified login)
   const isStudentPortal = portalInfo?.portalId === 'student-portal';
 
@@ -75,15 +76,15 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
           try {
             // Force new token generation after login (don't use cache)
             const tokenResponse = await authAPI.generatePortalToken(portalInfo.portalId, true);
-            
+
             if (tokenResponse.success) {
               // For Student Portal, determine redirect URL based on user's databaseSource
               let redirectUrl = portalInfo.url;
-              
+
               if (isStudentPortal) {
                 const userDatabaseSource = response.data.user.databaseSource;
                 const baseUrl = new URL(portalInfo.url).origin;
-                
+
                 // If user is from rbac_users, redirect to /login (staff/admin)
                 // If user is from student_credentials, redirect to /student/login (student)
                 if (userDatabaseSource === 'rbac_users') {
@@ -93,11 +94,11 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
                   redirectUrl = `${baseUrl}/student/login`;
                 }
               }
-              
+
               // Redirect to portal with encrypted token
               const portalUrl = new URL(redirectUrl);
               portalUrl.searchParams.set('token', tokenResponse.data.encryptedToken);
-              
+
               // Redirect to portal
               window.location.href = portalUrl.toString();
             } else {
@@ -121,14 +122,17 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 flex items-center justify-center px-4 py-8 sm:py-12 relative overflow-hidden">
-      {/* Background decorative elements */}
+    <div className="w-full min-h-screen bg-white relative overflow-hidden flex flex-col" style={{
+      paddingTop: 'clamp(80px, 12vw, 100px)',
+      paddingBottom: 'clamp(4rem, 10vw, 8rem)'
+    }}>
+      {/* 3D Decorative Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           animate={{
             y: [0, -40, 0],
             rotate: [0, 5, 0],
-            scale: [1, 1.1, 1],
+            scale: [1, 1.1, 1]
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           className="absolute -top-[10%] -left-[5%] w-[40%] h-[40%] rounded-full blur-[80px] lg:blur-[120px] opacity-[0.05]"
@@ -138,7 +142,7 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
           animate={{
             y: [0, 60, 0],
             rotate: [0, -10, 0],
-            scale: [1, 1.2, 1],
+            scale: [1, 1.2, 1]
           }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-[40%] -right-[10%] w-[50%] h-[50%] rounded-full blur-[100px] lg:blur-[150px] opacity-[0.03]"
@@ -146,170 +150,250 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
         />
       </div>
 
-      <div className="w-full max-w-md relative z-10 mx-auto">
-        {/* Back button */}
-        {onBack && (
-          <motion.button
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            onClick={onBack}
-            className="mb-4 sm:mb-6 flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors font-medium text-sm sm:text-base"
-          >
-            <ArrowRight className="rotate-180" size={18} />
-            Back to Portals
-          </motion.button>
-        )}
+      {/* Header Area */}
+      <div className="mb-16 lg:mb-32 px-4 sm:px-8 lg:px-12 relative z-10 shrink-0">
+        <div className="section-container" style={{ padding: 'clamp(2rem, 4vw, 4rem) 1rem' }}>
+          <div className="text-center">
+            <motion.h1
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+              className="text-4xl sm:text-5xl lg:text-[clamp(2.5rem,7vw,4.5rem)] font-extrabold text-slate-900 tracking-tighter leading-[1.1] lg:leading-[0.9] [text-shadow:0_10px_30px_rgba(0,0,0,0.05)]"
+            >
+              Portal <span className="text-indigo-600">Access.</span>
+            </motion.h1>
+            {portalInfo && (
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="mt-4 text-base sm:text-lg lg:text-xl font-medium max-w-2xl mx-auto"
+                style={{ color: 'var(--color-text-muted)' }}
+              >
+                Sign in to access{' '}
+                <span className="font-bold px-2 py-0.5 rounded-lg bg-slate-100" style={{ color: portalInfo.color }}>
+                  {portalInfo.title}
+                </span>
+              </motion.p>
+            )}
+          </div>
+        </div>
+      </div>
 
-        {/* Login Card */}
+      {/* Login Form Section */}
+      <div className="section-container relative z-10 grow flex items-center justify-center px-6 sm:px-10 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-8 lg:p-10 w-full"
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="w-full max-w-[480px] mx-auto"
         >
-          {/* Header */}
-          <div className="text-center mb-6 sm:mb-8">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring" }}
-              className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-xl sm:rounded-2xl flex items-center justify-center"
-              style={{
-                backgroundColor: `${portalInfo?.color || '#4f46e5'}15`,
-                color: portalInfo?.color || '#4f46e5',
-              }}
-            >
-              <Lock size={28} className="sm:w-8 sm:h-8" />
-            </motion.div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 mb-2">
-              Portal Access
-            </h1>
-            {portalInfo && (
-              <p className="text-sm sm:text-base text-slate-600 font-medium">
-                Sign in to access <span className="font-bold" style={{ color: portalInfo.color }}>
-                  {portalInfo.title}
-                </span>
-              </p>
-            )}
-          </div>
-
-          {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
-            {/* Username Field */}
-            <div>
-              <label htmlFor="username" className="block text-sm font-semibold text-slate-700 mb-2">
-                Username
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User size={20} className="text-slate-400" />
-                </div>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  value={formData.username}
-                  onChange={handleChange}
-                  className={`w-full pl-12 pr-4 py-3.5 rounded-xl border-2 transition-all focus:outline-none focus:ring-2 ${
-                    errors.username
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-200'
-                      : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-200'
-                  }`}
-                  placeholder="Enter your username"
-                  disabled={isLoading}
-                />
-              </div>
-              {errors.username && (
-                <motion.p
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-red-600 flex items-center gap-1"
-                >
-                  <AlertCircle size={14} />
-                  {errors.username}
-                </motion.p>
-              )}
-            </div>
-
-            {/* Password Field */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-semibold text-slate-700 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Lock size={20} className="text-slate-400" />
-                </div>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`w-full pl-12 pr-4 py-3.5 rounded-xl border-2 transition-all focus:outline-none focus:ring-2 ${
-                    errors.password
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-200'
-                      : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-200'
-                  }`}
-                  placeholder="Enter your password"
-                  disabled={isLoading}
-                />
-              </div>
-              {errors.password && (
-                <motion.p
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-2 text-sm text-red-600 flex items-center gap-1"
-                >
-                  <AlertCircle size={14} />
-                  {errors.password}
-                </motion.p>
-              )}
-            </div>
-
-            {/* Error Message */}
-            {loginError && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="p-4 rounded-xl bg-red-50 border border-red-200 flex items-start gap-3"
+          {/* Login Card */}
+          <div className="bg-white rounded-[2.5rem] backdrop-blur-xl border p-6 sm:p-10 md:p-12 transition-all duration-500" style={{
+            border: '1px solid rgba(0, 0, 0, 0.06)',
+            boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.05)'
+          }}>
+            {/* Back button */}
+            {onBack && (
+              <motion.button
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                onClick={onBack}
+                className="mb-6 flex items-center gap-2 transition-all duration-200 font-medium group"
+                style={{
+                  color: 'var(--color-text-muted)',
+                  fontSize: 'clamp(0.875rem, 2vw, 1rem)',
+                  paddingTop: 'clamp(0.5rem, 1.2vw, 0.625rem)',
+                  paddingBottom: 'clamp(0.5rem, 1.2vw, 0.625rem)'
+                }}
+                onMouseEnter={(e) => e.target.style.color = 'var(--color-primary)'}
+                onMouseLeave={(e) => e.target.style.color = 'var(--color-text-muted)'}
               >
-                <AlertCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-red-800 font-medium">{loginError}</p>
-              </motion.div>
+                <ArrowRight className="rotate-180 group-hover:-translate-x-1 transition-transform duration-200" size={18} />
+                <span>Back to Portals</span>
+              </motion.button>
             )}
 
-            {/* Submit Button */}
-            <motion.button
-              type="submit"
-              disabled={isLoading}
-              whileHover={{ scale: isLoading ? 1 : 1.02 }}
-              whileTap={{ scale: isLoading ? 1 : 0.98 }}
-              className="w-full py-3.5 sm:py-4 rounded-xl font-bold text-white flex items-center justify-center gap-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-sm sm:text-base"
-              style={{
-                backgroundColor: portalInfo?.color || '#4f46e5',
-              }}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 size={20} className="animate-spin" />
-                  Authenticating...
-                </>
-              ) : (
-                <>
-                  Sign In
-                  <ArrowRight size={20} />
-                </>
-              )}
-            </motion.button>
-          </form>
+            {/* Login Form */}
+            <form onSubmit={handleSubmit} style={{ gap: 'clamp(1.5rem, 3.5vw, 2rem)' }} className="flex flex-col">
+              {/* Username Field */}
+              <div style={{ marginBottom: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
+                <label
+                  htmlFor="username"
+                  className="block font-semibold mb-2.5"
+                  style={{
+                    color: 'var(--color-text-main)',
+                    fontSize: 'clamp(0.875rem, 2vw, 0.95rem)'
+                  }}
+                >
+                  Username
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User size={20} style={{ color: 'var(--color-text-muted)' }} />
+                  </div>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className={`w-full pl-12 pr-4 rounded-xl border-2 transition-all duration-200 focus:outline-none focus:ring-4 placeholder:text-slate-400 bg-white ${errors.username
+                      ? 'border-red-300 focus:border-red-500 focus:ring-red-200 bg-red-50/50'
+                      : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-200/50 hover:bg-slate-50'
+                      }`}
+                    style={{
+                      height: 'clamp(2.75rem, 4vw, 3rem)',
+                      color: 'var(--color-text-main)',
+                      fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+                    }}
+                    placeholder="Enter your username"
+                    disabled={isLoading}
+                  />
+                </div>
+                {errors.username && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-red-600 flex items-center gap-1.5 mt-2"
+                    style={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.875rem)' }}
+                  >
+                    <AlertCircle size={14} className="shrink-0" />
+                    <span>{errors.username}</span>
+                  </motion.p>
+                )}
+              </div>
 
-          {/* Footer */}
-          <div className="mt-6 text-center">
-            <p className="text-sm text-slate-500">
-              Secure authentication powered by{' '}
-              <span className="font-semibold text-slate-700">CRM Gateway</span>
-            </p>
+              {/* Password Field */}
+              <div style={{ marginBottom: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
+                <label
+                  htmlFor="password"
+                  className="block font-semibold mb-2.5"
+                  style={{
+                    color: 'var(--color-text-main)',
+                    fontSize: 'clamp(0.875rem, 2vw, 0.95rem)'
+                  }}
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <Lock size={20} style={{ color: 'var(--color-text-muted)' }} />
+                  </div>
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={`w-full pl-12 pr-12 rounded-xl border-2 transition-all duration-200 focus:outline-none focus:ring-4 placeholder:text-slate-400 bg-white ${errors.password
+                      ? 'border-red-300 focus:border-red-500 focus:ring-red-200 bg-red-50/50'
+                      : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-200/50 hover:bg-slate-50'
+                      }`}
+                    style={{
+                      height: 'clamp(2.75rem, 4vw, 3rem)',
+                      color: 'var(--color-text-main)',
+                      fontSize: 'clamp(0.9rem, 2vw, 1rem)'
+                    }}
+                    placeholder="Enter your password"
+                    disabled={isLoading}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 pr-4 flex items-center transition-colors"
+                    style={{ color: 'var(--color-text-muted)' }}
+                    onMouseEnter={(e) => e.target.style.color = 'var(--color-text-main)'}
+                    onMouseLeave={(e) => e.target.style.color = 'var(--color-text-muted)'}
+                    tabIndex={-1}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-sm text-red-600 flex items-center gap-1.5 mt-2"
+                    style={{ fontSize: 'clamp(0.75rem, 1.8vw, 0.875rem)' }}
+                  >
+                    <AlertCircle size={14} className="shrink-0" />
+                    <span>{errors.password}</span>
+                  </motion.p>
+                )}
+              </div>
+
+              {/* Error Message */}
+              {loginError && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 rounded-xl bg-red-50 border-2 border-red-200 flex items-start gap-3"
+                  style={{
+                    marginBottom: 'clamp(1rem, 2.5vw, 1.5rem)',
+                    padding: 'clamp(0.875rem, 2vw, 1rem)'
+                  }}
+                >
+                  <AlertCircle size={20} className="text-red-600 shrink-0 mt-0.5" />
+                  <p className="text-sm text-red-800 font-medium leading-relaxed" style={{ fontSize: 'clamp(0.875rem, 2vw, 0.95rem)' }}>{loginError}</p>
+                </motion.div>
+              )}
+
+              {/* Submit Button */}
+              <motion.button
+                type="submit"
+                disabled={isLoading}
+                whileHover={{ scale: isLoading ? 1 : 1.02, y: isLoading ? 0 : -2 }}
+                whileTap={{ scale: isLoading ? 1 : 0.98 }}
+                className="w-full rounded-md font-bold text-white flex items-center justify-center gap-2.5 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                style={{
+                  backgroundColor: portalInfo?.color || 'var(--color-primary)',
+                  boxShadow: 'var(--shadow-soft)',
+                  paddingLeft: 'clamp(1.5rem, 3.5vw, 2rem)',
+                  paddingRight: 'clamp(1.5rem, 3.5vw, 2rem)',
+                  paddingTop: 'clamp(0.875rem, 2vw, 1rem)',
+                  paddingBottom: 'clamp(0.875rem, 2vw, 1rem)',
+                  fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                  lineHeight: '1.5',
+                  marginTop: 'clamp(1.5rem, 3.5vw, 2rem)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLoading) {
+                    e.target.style.boxShadow = '0 15px 30px -5px rgba(99, 102, 241, 0.3)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.boxShadow = 'var(--shadow-soft)';
+                }}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 size={22} className="animate-spin" />
+                    <span>Authenticating...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Sign In</span>
+                    <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
+              </motion.button>
+            </form>
+
+            {/* Footer */}
+            <div className="mt-8 pt-6 border-t text-center" style={{
+              borderColor: 'var(--color-border-soft)',
+              marginTop: 'clamp(2rem, 4vw, 2.5rem)',
+              paddingTop: 'clamp(1.5rem, 3vw, 2rem)'
+            }}>
+              <p style={{
+                color: 'var(--color-text-muted)',
+                fontSize: 'clamp(0.75rem, 1.8vw, 0.875rem)'
+              }}>
+                Secure authentication powered by{' '}
+                <span className="font-semibold" style={{ color: 'var(--color-text-main)' }}>CRM Gateway</span>
+              </p>
+            </div>
           </div>
         </motion.div>
       </div>

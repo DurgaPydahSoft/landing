@@ -21,21 +21,10 @@
   --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 
-/* Keep CSS variables for backward compatibility and var() usage */
+/* Base Theme Variables */
 :root {
-  --primary: #6366f1;
-  --primary-light: #818cf8;
-  --secondary: #0ea5e9;
-  --bg-cloud: #f8fafc;
-  --bg-white: #ffffff;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --border-soft: #e2e8f0;
-  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
   --radius-lg: 24px;
   --radius-md: 16px;
-  --font-main: 'Plus Jakarta Sans', sans-serif;
 }
 
 html {
@@ -141,34 +130,41 @@ button {
 
 /* Standardized Button Styles - Using CSS variables for compatibility */
 .btn-primary {
-  padding: clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+  padding: clamp(0.75rem, 2vw, 0.875rem) clamp(1.5rem, 4vw, 2rem);
   background-color: var(--color-primary);
   color: white;
   border-radius: var(--radius-md);
-  font-weight: 600;
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  box-shadow: var(--shadow-soft);
-  transition: all 0.2s ease;
+  font-weight: 700;
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  @apply flex items-center justify-center gap-2;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.4);
+  background-color: var(--color-primary-light);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
 }
 
 .btn-secondary {
-  padding: clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+  padding: clamp(0.75rem, 2vw, 0.875rem) clamp(1.5rem, 4vw, 2rem);
   background-color: white;
   color: var(--color-text-main);
   border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-md);
   font-weight: 600;
-  font-size: clamp(0.9rem, 2vw, 1rem);
+  font-size: clamp(0.875rem, 2vw, 1rem);
   transition: all 0.2s ease;
 }
 
 .btn-secondary:hover {
   background-color: var(--color-bg-cloud);
+  border-color: var(--color-primary-light);
   transform: translateY(-2px);
 }
 
