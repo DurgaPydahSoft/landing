@@ -1,5 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
 
+/* Tailwind v4 Theme Configuration - Using @theme directive */
+@theme {
+  /* Custom Colors - Tailwind v4 format */
+  --color-primary: #6366f1;
+  --color-primary-light: #818cf8;
+  --color-secondary: #0ea5e9;
+  --color-bg-cloud: #f8fafc;
+  --color-bg-white: #ffffff;
+  --color-text-main: #1e293b;
+  --color-text-muted: #64748b;
+  --color-border-soft: #e2e8f0;
+  
+  /* Custom Font Family */
+  --font-family-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  
+  /* Custom Shadows */
+  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+/* Keep CSS variables for backward compatibility and var() usage */
 :root {
   --primary: #6366f1;
   --primary-light: #818cf8;
@@ -27,9 +49,9 @@ html {
 }
 
 body {
-  font-family: var(--font-main);
-  background: var(--bg-cloud);
-  color: var(--text-main);
+  font-family: var(--font-family-sans);
+  background: var(--color-bg-cloud);
+  color: var(--color-text-main);
   line-height: 1.6;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
@@ -48,20 +70,20 @@ button {
   font-family: inherit;
 }
 
-/* Cloudy background effect */
+/* Cloudy background effect - Keep as utility class */
 .cloud-bg {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -10;
   background: radial-gradient(circle at 20% 20%, #eff6ff 0%, transparent 40%),
     radial-gradient(circle at 80% 80%, #f5f3ff 0%, transparent 40%);
   opacity: 0.6;
 }
 
-/* Glassmorphism */
+/* Glassmorphism - Keep as utility class */
 .glass {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
@@ -69,8 +91,112 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+/* Section container - Convert to Tailwind utility */
 .section-container {
   max-width: 1600px;
   margin: 0 auto;
-  padding: 0 5vw;
+  padding: 0 clamp(1rem, 5vw, 5rem);
+}
+
+/* Responsive Utilities - Convert to Tailwind classes in components */
+.desktop-menu {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .desktop-menu {
+    display: flex;
+  }
+}
+
+.mobile-toggle {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .mobile-toggle {
+    display: none;
+  }
+}
+
+/* Standardized Spacing Scale */
+:root {
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  --spacing-2xl: 4rem;
+  --spacing-3xl: 6rem;
+  --spacing-4xl: 8rem;
+  --spacing-5xl: 10rem;
+  
+  /* Responsive spacing */
+  --spacing-section: clamp(4rem, 10vw, 10rem);
+  --spacing-section-sm: clamp(3rem, 6vw, 6rem);
+  --spacing-gap: clamp(1rem, 2vw, 2rem);
+  --spacing-gap-lg: clamp(2rem, 5vw, 4rem);
+}
+
+/* Standardized Button Styles - Using CSS variables for compatibility */
+.btn-primary {
+  padding: clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  box-shadow: var(--shadow-soft);
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(99, 102, 241, 0.3);
+}
+
+.btn-secondary {
+  padding: clamp(0.875rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+  background-color: white;
+  color: var(--color-text-main);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-bg-cloud);
+  transform: translateY(-2px);
+}
+
+/* Responsive Typography - Use Tailwind classes in components */
+h1, h2, h3, h4, h5, h6 {
+  @apply leading-tight tracking-tight;
+}
+
+/* Smooth Scrolling for Mobile */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Focus States for Accessibility */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Hide Scrollbar but Keep Functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
