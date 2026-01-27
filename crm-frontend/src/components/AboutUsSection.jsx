@@ -54,7 +54,7 @@ const AboutUsSection = () => {
                             <motion.path
                                 d="M 50 0 C 50 8, 41 8, 41 16 C 41 33, 59 33, 59 50 C 59 67, 41 67, 41 84 C 41 92, 50 92, 50 100"
                                 fill="none"
-                                stroke="var(--primary)"
+                                stroke="var(--color-primary)"
                                 strokeWidth="3"
                                 vectorEffect="non-scaling-stroke"
                                 style={{ pathLength }}
@@ -63,7 +63,7 @@ const AboutUsSection = () => {
                             <motion.path
                                 d="M 50 0 C 50 8, 41 8, 41 16 C 41 33, 59 33, 59 50 C 59 67, 41 67, 41 84 C 41 92, 50 92, 50 100"
                                 fill="none"
-                                stroke="var(--primary)"
+                                stroke="var(--color-primary)"
                                 strokeWidth="3"
                                 strokeOpacity="0.4"
                                 vectorEffect="non-scaling-stroke"
@@ -79,7 +79,7 @@ const AboutUsSection = () => {
                     <div className="relative z-20">
                         <BranchBlock
                             title="Our Vision"
-                            icon={<Eye size={28} color="var(--primary)" />}
+                            icon={<Eye size={28} color="var(--color-primary)" />}
                             side="left"
                             content="We empower institutions with data-driven decision tools, streamlining the soil for institutional growth across India with minimal administrative effort."
                             delay={0.1}

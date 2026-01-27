@@ -150,10 +150,14 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
         />
       </div>
 
-      {/* Header Area */}
-      <div className="mb-16 lg:mb-32 px-4 sm:px-8 lg:px-12 relative z-10 shrink-0">
-        <div className="section-container" style={{ padding: 'clamp(2rem, 4vw, 4rem) 1rem' }}>
-          <div className="text-center">
+      {/* Single container: header + form share same width & padding for alignment */}
+      <div className="w-full max-w-[1600px] mx-auto px-6 sm:px-10 lg:px-12 flex flex-col flex-1 relative z-10">
+        {/* Header */}
+        <div
+          className="shrink-0 mb-16 lg:mb-32 text-center"
+          style={{ paddingTop: 'clamp(2rem, 4vw, 4rem)', paddingBottom: 'clamp(2rem, 4vw, 4rem)' }}
+        >
+          <div className="max-w-2xl mx-auto">
             <motion.h1
               initial={{ opacity: 0, scale: 0.9, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -167,7 +171,7 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
-                className="mt-4 text-base sm:text-lg lg:text-xl font-medium max-w-2xl mx-auto"
+                className="mt-4 text-base sm:text-lg lg:text-xl font-medium"
                 style={{ color: 'var(--color-text-muted)' }}
               >
                 Sign in to access{' '}
@@ -178,16 +182,15 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
             )}
           </div>
         </div>
-      </div>
 
-      {/* Login Form Section */}
-      <div className="section-container relative z-10 grow flex items-center justify-center px-6 sm:px-10 lg:px-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="w-full max-w-[480px] mx-auto"
-        >
+        {/* Form section */}
+        <div className="flex-1 flex items-center justify-center min-h-0">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="w-full max-w-[480px]"
+          >
           {/* Login Card */}
           <div className="bg-white rounded-[2.5rem] backdrop-blur-xl border p-6 sm:p-10 md:p-12 transition-all duration-500" style={{
             border: '1px solid rgba(0, 0, 0, 0.06)',
@@ -244,6 +247,9 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
                       }`}
                     style={{
                       height: 'clamp(2.75rem, 4vw, 3rem)',
+                      paddingTop: '0.5rem',
+                      paddingBottom: '0.5rem',
+                      lineHeight: 1.25,
                       color: 'var(--color-text-main)',
                       fontSize: 'clamp(0.9rem, 2vw, 1rem)'
                     }}
@@ -292,6 +298,9 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
                       }`}
                     style={{
                       height: 'clamp(2.75rem, 4vw, 3rem)',
+                      paddingTop: '0.5rem',
+                      paddingBottom: '0.5rem',
+                      lineHeight: 1.25,
                       color: 'var(--color-text-main)',
                       fontSize: 'clamp(0.9rem, 2vw, 1rem)'
                     }}
@@ -396,6 +405,7 @@ const Login = ({ portalInfo, onLoginSuccess, onBack }) => {
             </div>
           </div>
         </motion.div>
+        </div>
       </div>
     </div>
   );
