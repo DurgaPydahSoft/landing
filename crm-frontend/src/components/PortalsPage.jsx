@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import {
     ArrowLeft, ExternalLink, CheckCircle2
 } from 'lucide-react';
+import { authAPI } from '../services/api';
 
 const portalDetails = [
     {
@@ -12,7 +13,8 @@ const portalDetails = [
         features: ['Automated Lead Scoring', 'Bulk Communication Tools', 'Document Verification Hub', 'Real-time Conversion Analytics'],
         color: '#0ea5e9',
         image: 'https://colorlib.com/wp/wp-content/uploads/sites/2/sb-admin-2-free-dashboard-template-1.jpg',
-        url: 'https://admissions.pydahsoft.in'
+        url: 'http://localhost:3000/login',
+        portalId: 'admissions-crm'
     },
     {
         title: 'Student Academic Portal',
@@ -21,7 +23,8 @@ const portalDetails = [
         features: ['Personalized Course Timetable', 'Attendance & Grade Tracking', 'Digital Library Access', 'Campus Event Calendar'],
         color: '#f59e0b',
         image: 'https://colorlib.com/wp/wp-content/uploads/sites/2/free-dashboard-templates.jpg',
-        url: 'https://pydahsdms.vercel.app'
+        url: 'http://localhost:3000/student/login',
+        portalId: 'student-portal'
     },
     {
         title: 'Hostel Automation',
@@ -30,7 +33,8 @@ const portalDetails = [
         features: ['Smart Room Allocation', 'Security & Visitor Logs', 'Automated Mess Management', 'Student Safety Dashboard'],
         color: '#6366f1',
         image: 'https://colorlib.com/wp/wp-content/uploads/sites/2/sb-admin-2-free-dashboard-template-1.jpg',
-        url: 'https://hms.pydahsoft.in'
+        url: 'http://localhost:3000/login',
+        portalId: 'hostel-automation'
     },
     {
         title: 'HRMS & Payroll',
@@ -39,11 +43,12 @@ const portalDetails = [
         features: ['Automated Payroll Processing', 'Leave & Attendance Mapping', 'Performance Appraisal Hub', 'Staff Self-Service Portal'],
         color: '#ec4899',
         image: 'https://colorlib.com/wp/wp-content/uploads/sites/2/sb-admin-2-free-dashboard-template-1.jpg',
-        url: 'https://hrms.pydahsoft.in'
+        url: 'http://localhost:3000/login',
+        portalId: 'hrms'
     }
 ];
 
-const PortalsPage = ({ onBack }) => {
+const PortalsPage = ({ onBack, onPortalClick }) => {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -102,7 +107,13 @@ const PortalsPage = ({ onBack }) => {
             <div className="section-container px-6 sm:px-10 lg:px-12 relative z-10">
                 <div className="flex flex-col gap-24 lg:gap-64 md:gap-80">
                     {portalDetails.map((portal, idx) => (
-                        <PortalSection key={portal.title} portal={portal} idx={idx} isMobile={isMobile} />
+                        <PortalSection 
+                            key={portal.title} 
+                            portal={portal} 
+                            idx={idx} 
+                            isMobile={isMobile}
+                            onPortalClick={onPortalClick}
+                        />
                     ))}
                 </div>
             </div>
@@ -110,7 +121,7 @@ const PortalsPage = ({ onBack }) => {
     );
 };
 
-const PortalSection = ({ portal, idx, isMobile }) => {
+const PortalSection = ({ portal, idx, isMobile, onPortalClick }) => {
     const sectionRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: sectionRef,
@@ -122,6 +133,66 @@ const PortalSection = ({ portal, idx, isMobile }) => {
     const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
     const scale = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0.95, 1, 1, 0.95]);
 
+    const handlePortalClick = async (e) => {
+        e.preventDefault();
+        
+        // Check if user is already authenticated
+        const accessToken = localStorage.getItem('accessToken');
+        
+        if (accessToken) {
+            // User is already logged in, generate token (or use cached) and redirect directly
+            try {
+                // Try to use cached token first, generate new if needed
+                const tokenResponse = await authAPI.generatePortalToken(portal.portalId, false);
+                
+                if (tokenResponse.success) {
+                    // For Student Portal, determine redirect URL based on user's databaseSource
+                    let redirectUrl = portal.url;
+                    
+                    if (portal.portalId === 'student-portal') {
+                        // Get user info from localStorage to determine databaseSource
+                        const userStr = localStorage.getItem('user');
+                        if (userStr) {
+                            try {
+                                const user = JSON.parse(userStr);
+                                const baseUrl = new URL(portal.url).origin;
+                                
+                                // If user is from rbac_users, redirect to /login (staff/admin)
+                                // If user is from student_credentials, redirect to /student/login (student)
+                                if (user.databaseSource === 'rbac_users') {
+                                    redirectUrl = `${baseUrl}/login`;
+                                } else {
+                                    // student_credentials or other - use /student/login
+                                    redirectUrl = `${baseUrl}/student/login`;
+                                }
+                            } catch (e) {
+                                // If parsing fails, use default URL
+                                console.error('Error parsing user data:', e);
+                            }
+                        }
+                    }
+                    
+                    // Redirect to portal with encrypted token
+                    const portalUrl = new URL(redirectUrl);
+                    portalUrl.searchParams.set('token', tokenResponse.data.encryptedToken);
+                    window.location.href = portalUrl.toString();
+                    return;
+                }
+            } catch (error) {
+                console.error('Token generation error:', error);
+                // If token generation fails, fall through to login page
+            }
+        }
+        
+        // If not authenticated or token generation failed, show login page
+        if (onPortalClick) {
+            onPortalClick({
+                ...portal,
+                portalId: portal.portalId
+            });
+        }
+    };
+
     return (
         <motion.div
             ref={sectionRef}
@@ -129,11 +200,9 @@ const PortalSection = ({ portal, idx, isMobile }) => {
             className={`flex flex-col ${idx % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-12 lg:gap-32 min-h-auto lg:min-h-[70vh]`}
         >
             {/* Image Visual - Clickable with 3D Tilt */}
-            <a
-                href={portal.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full lg:w-1/2 relative group block [perspective:2000px]"
+            <div
+                onClick={handlePortalClick}
+                className="w-full lg:w-1/2 relative group block [perspective:2000px] cursor-pointer"
             >
                 <motion.div
                     style={{ y: yImg }}
@@ -180,7 +249,7 @@ const PortalSection = ({ portal, idx, isMobile }) => {
                         <span className="text-[10px] lg:text-xs font-black text-slate-500 uppercase tracking-[0.2em]">Live Status</span>
                     </motion.div>
                 </motion.div>
-            </a>
+            </div>
 
             {/* Info Content - Parallax Text */}
             <motion.div
