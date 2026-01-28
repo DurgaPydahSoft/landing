@@ -13,7 +13,7 @@ const portalDetails = [
         features: ['Automated Lead Scoring', 'Bulk Communication Tools', 'Document Verification Hub', 'Real-time Conversion Analytics'],
         color: '#0ea5e9',
         image: 'https://colorlib.com/wp/wp-content/uploads/sites/2/sb-admin-2-free-dashboard-template-1.jpg',
-        url: 'http://localhost:3000/login',
+        url: 'https://pydah-admissions.vercel.app/auth/login',
         portalId: 'admissions-crm'
     },
     {
